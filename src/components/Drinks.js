@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import context from '../context/context';
 
-function Foods() {
+function Drinks() {
   const { dataDrinks, setDataDrinks } = useContext(context);
   const MAX_RECIPES = 12;
 
@@ -40,4 +40,4 @@ function Foods() {
   );
 }
 
-export default Foods;
+export default Drinks;
