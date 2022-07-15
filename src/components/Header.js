@@ -33,7 +33,7 @@ function Header({ title, isSearch }) {
         )
       }
       {
-        isSearchBar && <SearchBar />
+        isSearchBar && <SearchBar title={ title } />
       }
     </div>
   );
