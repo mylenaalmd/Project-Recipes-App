@@ -7,7 +7,7 @@ function Drinks() {
   return (
     <>
       <Header
-        title="drinks"
+        title="Drinks"
         isSearch
       />
       <Recipes

@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 function SearchBar() {
+  const [valueSearch, setValueSearch] = useState('');
+
+  const handleChange = (callback, { target: { value } }) => {
+    callback(value);
+  };
+
   return (
     <div className="searchBar">
-      <input type="text" data-testid="search-input" />
+      <input
+        type="text"
+        data-testid="search-input"
+        value={ valueSearch }
+        onChange={ (e) => handleChange(setValueSearch, e) }
+      />
 
       <input
         type="radio"
@@ -26,8 +37,12 @@ function SearchBar() {
         data-testid="first-letter-search-radio"
       />
       First letter
-
-      <button type="button" data-testid="exec-search-btn">Search</button>
+      <button
+        type="button"
+        data-testid="exec-search-btn"
+      >
+        Search
+      </button>
     </div>
   );
 }
