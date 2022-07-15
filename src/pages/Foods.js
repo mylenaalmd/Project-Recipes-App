@@ -7,7 +7,7 @@ function Foods() {
   return (
     <>
       <Header
-        title="foods"
+        title="Foods"
         isSearch
       />
       <Recipes

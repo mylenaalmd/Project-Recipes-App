@@ -3,12 +3,12 @@
 }
 
 .footer {
+  align-self: flex-end;
   background-color: gray;
-  width: 100%;
-  display: flex;
-  align-self: flex-end ;
-  position: fixed;
   bottom: 0;
+  display: flex;
+  position: fixed;
+  width: 100%;
 }
 
 .cards {
@@ -17,8 +17,8 @@
 }
 
 .card {
-  margin-left: 20px;
   margin-bottom: 10px;
+  margin-left: 20px;
 }
 
 .cards img {
