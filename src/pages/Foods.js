@@ -1,9 +1,20 @@
 import React from 'react';
-import SearchBar from './SearchBar';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import Recipes from '../components/Recipes';
 
 function Foods() {
   return (
-    <SearchBar />
+    <>
+      <Header
+        title="foods"
+        isSearch
+      />
+      <Recipes
+        type="foods"
+      />
+      <Footer />
+    </>
   );
 }
 

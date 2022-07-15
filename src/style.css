@@ -1,0 +1,30 @@
+.header {
+  display: flex;
+}
+
+.footer {
+  background-color: gray;
+  width: 100%;
+  display: flex;
+  align-self: flex-end ;
+  position: fixed;
+  bottom: 0;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card {
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.cards img {
+  max-width: 100px;
+}
+
+.cards h1 {
+  font-size: small;
+}
