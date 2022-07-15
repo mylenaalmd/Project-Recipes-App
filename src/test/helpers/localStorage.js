@@ -1,3 +1,5 @@
+// fonte: https://stackoverflow.com/questions/11485420/how-to-mock-localstorage-in-javascript-unit-tests
+
 const localStorageMock = (() => {
   let store = {};
   return {

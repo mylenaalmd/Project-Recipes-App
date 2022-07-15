@@ -54,9 +54,9 @@ describe('Testes da tela de Login', () => {
     const USER_KEY = 'user';
     const MEALSTOKEN_KEY = 'mealsToken';
     const COCKTAILTOKEN_KEY = 'cocktailsToken';
-    const TOKEN_VALUE = 1;
+    const TOKEN_VALUE = '1';
     const EMAIL_VALID = 'test@test.com';
-    const PASSWORD_VALID = 'senha1';
+    const PASSWORD_VALID = 'senha12';
 
     const inputEmail = screen.getByTestId('email-input');
     const inputPass = screen.getByTestId('password-input');
@@ -71,17 +71,11 @@ describe('Testes da tela de Login', () => {
     userEvent.type(inputPass, PASSWORD_VALID);
     userEvent.click(btnLogin);
 
-    let getUser = localStorage.getItem(USER_KEY);
-    let getMealToken = localStorage.getItem(MEALSTOKEN_KEY);
-    let getCocktailToken = localStorage.getItem(COCKTAILTOKEN_KEY);
+    const getUser = localStorage.getItem(USER_KEY);
+    const getMealToken = localStorage.getItem(MEALSTOKEN_KEY);
+    const getCocktailToken = localStorage.getItem(COCKTAILTOKEN_KEY);
 
-    setTimeout(() => {
-      getUser = localStorage.getItem(USER_KEY);
-      getMealToken = localStorage.getItem(MEALSTOKEN_KEY);
-      getCocktailToken = localStorage.getItem(COCKTAILTOKEN_KEY);
-    }, 2000);
-
-    expect(getUser).toEqual({ email: EMAIL_VALID });
+    expect(getUser).toEqual(JSON.stringify({ email: EMAIL_VALID }));
     expect(getCocktailToken).toBe(TOKEN_VALUE);
     expect(getMealToken).toBe(TOKEN_VALUE);
 
