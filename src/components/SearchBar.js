@@ -37,7 +37,6 @@ function SearchBar() {
         data-testid="first-letter-search-radio"
       />
       First letter
-
       <button
         type="button"
         data-testid="exec-search-btn"
