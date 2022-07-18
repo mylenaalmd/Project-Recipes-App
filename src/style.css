@@ -28,3 +28,11 @@
 .cards h1 {
   font-size: small;
 }
+
+.detail img {
+  max-width: 100px;
+}
+
+.RecomendationCard {
+  max-width: 150px;
+}
