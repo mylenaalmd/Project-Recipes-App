@@ -2,11 +2,12 @@ import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/react';
 import renderWithRouter from './helpers/renderWithRouter';
-import Header from '../components/Header';
+import App from '../App';
 
 describe('Testes do componente Header', () => {
   it('Testa se o icon redireciona para /profile', () => {
-    const { history } = renderWithRouter(<Header />);
+    const { history } = renderWithRouter(<App />);
+    history.push('/foods');
 
     const iconProfileBtn = screen.getByTestId('profile-top-btn');
 
@@ -18,7 +19,8 @@ describe('Testes do componente Header', () => {
   });
 
   it('Testa se o search funciona corretamente', () => {
-    renderWithRouter(<Header title="Foods" isSearch="true" />);
+    const { history } = renderWithRouter(<App />);
+    history.push('/foods');
 
     const btnSearch = screen.getByTestId('search-top-btn');
 

@@ -18,7 +18,7 @@ function SearchBar({ title }) {
     if (result.meals.length === 1) {
       history.push(`/foods/${result.meals[0].idMeal}`);
     } else {
-      setDataFoods(result);
+      setDataFoods(result.meals);
     }
   };
 
@@ -26,7 +26,7 @@ function SearchBar({ title }) {
     if (result.drinks.length === 1) {
       history.push(`/drinks/${result.drinks[0].idDrink}`);
     } else {
-      setDataDrinks(result);
+      setDataDrinks(result.drinks);
     }
   };
 
@@ -46,51 +46,23 @@ function SearchBar({ title }) {
   };
 
   const searchFoods = () => {
-    switch (valueRadio) {
-    case 'ingredient':
-      fetchApi('https://www.themealdb.com/api/json/v1/1/filter.php?i=');
-      break;
-    case 'name':
-      fetchApi('https://www.themealdb.com/api/json/v1/1/search.php?s=');
-      break;
-    case TEXT_LETTER:
-      fetchApi('https://www.themealdb.com/api/json/v1/1/search.php?f=');
-      break;
-    default:
-      break;
-    }
+    if (valueRadio === 'ingredient') return fetchApi('https://www.themealdb.com/api/json/v1/1/filter.php?i=');
+    if (valueRadio === 'name') return fetchApi('https://www.themealdb.com/api/json/v1/1/search.php?s=');
+    if (valueRadio === TEXT_LETTER) return fetchApi('https://www.themealdb.com/api/json/v1/1/search.php?f=');
   };
 
   const searchDrinks = () => {
-    switch (valueRadio) {
-    case 'ingredient':
-      fetchApi('https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=');
-      break;
-    case 'name':
-      fetchApi('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
-      break;
-    case TEXT_LETTER:
-      fetchApi('https://www.thecocktaildb.com/api/json/v1/1/search.php?f=');
-      break;
-    default:
-      break;
-    }
+    if (valueRadio === 'ingredient') return fetchApi('https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=');
+    if (valueRadio === 'name') return fetchApi('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=');
+    if (valueRadio === TEXT_LETTER) return fetchApi('https://www.thecocktaildb.com/api/json/v1/1/search.php?f=');
   };
 
   const searchSubmit = () => {
     if (valueRadio === TEXT_LETTER && valueSearch.length > 1) {
       global.alert('Your search must have only 1 (one) character');
     } else {
-      switch (title) {
-      case 'Foods':
-        searchFoods();
-        break;
-      case 'Drinks':
-        searchDrinks();
-        break;
-      default:
-        break;
-      }
+      if (title === 'Foods') return searchFoods();
+      return searchDrinks();
     }
   };
 
