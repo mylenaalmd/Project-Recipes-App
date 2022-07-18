@@ -3,6 +3,8 @@ import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import context from '../context/context';
 
+const LIMIT_FETCH = 12;
+
 function SearchBar({ title }) {
   const [valueSearch, setValueSearch] = useState('');
   const [valueRadio, setValueRadio] = useState('ingredient');
@@ -18,7 +20,7 @@ function SearchBar({ title }) {
     if (result.meals.length === 1) {
       history.push(`/foods/${result.meals[0].idMeal}`);
     } else {
-      setDataFoods(result.meals);
+      setDataFoods(result.meals.filter((_el, index) => index < LIMIT_FETCH));
     }
   };
 
@@ -26,7 +28,7 @@ function SearchBar({ title }) {
     if (result.drinks.length === 1) {
       history.push(`/drinks/${result.drinks[0].idDrink}`);
     } else {
-      setDataDrinks(result.drinks);
+      setDataDrinks(result.drinks.filter((_el, index) => index < LIMIT_FETCH));
     }
   };
 
