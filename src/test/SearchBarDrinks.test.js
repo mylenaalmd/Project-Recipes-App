@@ -2,7 +2,7 @@ import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/react';
 import renderWithRouter from './helpers/renderWithRouter';
-import drinksAPI from './helpers/drinksAPI';
+import { drinksAPI } from './helpers/drinksAPI';
 import App from '../App';
 import { firstLetterDrink, abcDrink,
   ingredientDrink, nameDrink } from './helpers/searchAPI';
@@ -128,56 +128,69 @@ describe('Testes do componente SearchBar - drinks', () => {
     expect(global.fetch).toBeCalledWith('https://www.thecocktaildb.com/api/json/v1/1/search.php?f=a');
   });
 
-  it('Testa se quando tem apenas uma bebida, muda para a pag de details', async () => {
-    const searchTopBtn = screen.getByTestId(txtSearchBtn);
-    expect(searchTopBtn).toBeInTheDocument();
-    userEvent.click(searchTopBtn);
+  it('Testa se quando tem apenas uma bebida, muda para a pag de details',
+    async () => {
+      jest.spyOn(global, 'fetch')
+        .mockImplementation(() => Promise.resolve({
+          json: () => Promise.resolve(abcDrink),
+        }));
 
-    const searchInput = screen.getByTestId(txtSearchInput);
-    const execBtn = screen.getByTestId(txtExecBtn);
+      const searchTopBtn = screen.getByTestId(txtSearchBtn);
+      expect(searchTopBtn).toBeInTheDocument();
+      userEvent.click(searchTopBtn);
 
-    expect(searchInput).toBeInTheDocument();
-    expect(execBtn).toBeInTheDocument();
+      const searchInput = screen.getByTestId(txtSearchInput);
+      const execBtn = screen.getByTestId(txtExecBtn);
 
-    const NAME = 'Coffee';
+      expect(searchInput).toBeInTheDocument();
+      expect(execBtn).toBeInTheDocument();
 
-    jest.spyOn(global, 'fetch')
-      .mockImplementation(() => Promise.resolve({
-        json: () => Promise.resolve(abcDrink),
-      }));
+      const NAME = 'ABC';
 
-    const nameRadio = screen.getByTestId('name-search-radio');
-    expect(nameRadio).toBeInTheDocument();
-    userEvent.click(nameRadio);
-    userEvent.type(searchInput, NAME);
-    userEvent.click(execBtn);
+      const nameRadio = screen.getByTestId('name-search-radio');
+      expect(nameRadio).toBeInTheDocument();
+      userEvent.click(nameRadio);
+      userEvent.type(searchInput, NAME);
+      userEvent.click(execBtn);
 
-    const { pathname } = historyMock.location;
-    expect(pathname).toBe(`/drinks/${abcDrink.drinks[0].idDrink}`);
-  });
+      expect(global.fetch).toBeCalledWith('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=ABC');
+
+      const cardDrink = await screen.findByTestId('recipe-title');
+      expect(cardDrink).toBeInTheDocument();
+
+      const { pathname } = historyMock.location;
+      expect(pathname).toBe(`/drinks/${abcDrink.drinks[0].idDrink}`);
+    });
 
   it('Verifica mensagem de alerta', () => {
+    jest.spyOn(global, 'fetch')
+      .mockImplementation(() => Promise.resolve({
+        json: () => Promise.resolve({ drinks: null }),
+      }));
+
+    const TXT = 'JDUHF';
     const searchTopBtn = screen.getByTestId(txtSearchBtn);
     expect(searchTopBtn).toBeInTheDocument();
     userEvent.click(searchTopBtn);
 
     const searchInput = screen.getByTestId(txtSearchInput);
+    const ingredientRadio = screen.getByTestId('ingredient-search-radio');
     const execBtn = screen.getByTestId(txtExecBtn);
 
     expect(searchInput).toBeInTheDocument();
+    expect(ingredientRadio).toBeInTheDocument();
     expect(execBtn).toBeInTheDocument();
 
     const ALERT_TXT = 'Sorry, we haven\'t found any recipes for these filters.';
 
-    jest.spyOn(global, 'fetch')
-      .mockImplementation(() => Promise.resolve({
-        json: () => Promise.resolve({
-          drinks: null,
-        }),
-      }));
+    jest.spyOn(global, 'alert')
+      .mockImplementation(() => ALERT_TXT);
 
+    userEvent.type(searchInput, TXT);
+    userEvent.click(ingredientRadio);
     userEvent.click(execBtn);
 
-    expect(global.alert.name).toBe(ALERT_TXT);
+    expect(global.alert).toBeCalled();
+    expect(global.alert).toBe(ALERT_TXT);
   });
 });

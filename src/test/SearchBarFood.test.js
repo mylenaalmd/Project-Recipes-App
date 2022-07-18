@@ -3,11 +3,13 @@ import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/react';
 import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
-import foodAPI from './helpers/foodAPI';
+import { foodAPI, burek } from './helpers/foodAPI';
 import { firstLetterFood,
   ingredientFood, nameFood } from './helpers/searchAPI';
 
 describe('Testes do componente SearchBar - foods', () => {
+  let historyMock = '';
+
   beforeEach(() => {
     jest.spyOn(global, 'fetch')
       .mockImplementation(() => Promise.resolve({
@@ -15,6 +17,7 @@ describe('Testes do componente SearchBar - foods', () => {
       }));
 
     const { history } = renderWithRouter(<App />);
+    historyMock = history;
     history.push('/foods');
   });
 
@@ -121,28 +124,38 @@ describe('Testes do componente SearchBar - foods', () => {
     expect(global.fetch).toBeCalled();
     expect(global.fetch).toBeCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?f=a');
   });
-  it('Testa  se redireciona com uma receita(food)', async () => {
-    const searchTopBtn = screen.getByTestId(txtSearchBtn);
-    expect(searchTopBtn).toBeInTheDocument();
-    userEvent.click(searchTopBtn);
 
-    const searchInput = screen.getByTestId(txtSearchInput);
-    const execBtn = screen.getByTestId(txtExecBtn);
+  it('Testa se quando tem apenas uma comida, muda para a pag de details',
+    async () => {
+      jest.spyOn(global, 'fetch')
+        .mockImplementation(() => Promise.resolve({
+          json: () => Promise.resolve(burek),
+        }));
 
-    expect(searchInput).toBeInTheDocument();
-    expect(execBtn).toBeInTheDocument();
+      const searchTopBtn = screen.getByTestId(txtSearchBtn);
+      expect(searchTopBtn).toBeInTheDocument();
+      userEvent.click(searchTopBtn);
 
-    const NAME = 'big';
+      const searchInput = screen.getByTestId(txtSearchInput);
+      const execBtn = screen.getByTestId(txtExecBtn);
 
-    jest.spyOn(global, 'fetch')
-      .mockImplementation(() => Promise.resolve({
-        json: () => Promise.resolve(nameFood.meals[0]),
-      }));
+      expect(searchInput).toBeInTheDocument();
+      expect(execBtn).toBeInTheDocument();
 
-    const nameRadio = screen.getByTestId('name-search-radio');
-    expect(nameRadio).toBeInTheDocument();
-    userEvent.click(nameRadio);
-    userEvent.type(searchInput, NAME);
-    userEvent.click(execBtn);
-  });
+      const NAME = 'Burek';
+
+      const nameRadio = screen.getByTestId('name-search-radio');
+      expect(nameRadio).toBeInTheDocument();
+      userEvent.click(nameRadio);
+      userEvent.type(searchInput, NAME);
+      userEvent.click(execBtn);
+
+      expect(global.fetch).toBeCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?s=Burek');
+
+      const cardFood = await screen.findByTestId('recipe-title');
+      expect(cardFood).toBeInTheDocument();
+
+      const { pathname } = historyMock.location;
+      expect(pathname).toBe(`/foods/${burek.meals[0].idMeal}`);
+    });
 });
