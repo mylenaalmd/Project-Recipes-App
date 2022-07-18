@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import context from '../context/context';
-import Footer from '../components/Footer';
 import useFetch from '../hooks/useFetch';
 
 const urlFoods = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
@@ -53,7 +52,6 @@ function Drinks() {
           ))}
         </div>
       ))}
-      <Footer />
     </div>
   );
 }
