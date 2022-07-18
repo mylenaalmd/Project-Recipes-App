@@ -4,10 +4,10 @@ import { screen } from '@testing-library/react';
 import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
 import foodAPI from './helpers/foodAPI';
-import { firstLetterDrink, firstLetterFood,
-  ingredientDrink, ingredientFood, nameDrink, nameFood } from './helpers/searchAPI';
+import { firstLetterFood,
+  ingredientFood, nameFood } from './helpers/searchAPI';
 
-describe('Testes do componente SearchBar', () => {
+describe('Testes do componente SearchBar - foods', () => {
   beforeEach(() => {
     jest.spyOn(global, 'fetch')
       .mockImplementation(() => Promise.resolve({
@@ -121,11 +121,28 @@ describe('Testes do componente SearchBar', () => {
     expect(global.fetch).toBeCalled();
     expect(global.fetch).toBeCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?f=a');
   });
+  it('Testa  se redireciona com uma receita(food)', async () => {
+    const searchTopBtn = screen.getByTestId(txtSearchBtn);
+    expect(searchTopBtn).toBeInTheDocument();
+    userEvent.click(searchTopBtn);
 
-  it('Testa se consegue buscar com todos os filtros (drinks)', async () => {
+    const searchInput = screen.getByTestId(txtSearchInput);
+    const execBtn = screen.getByTestId(txtExecBtn);
+
+    expect(searchInput).toBeInTheDocument();
+    expect(execBtn).toBeInTheDocument();
+
+    const NAME = 'big';
+
     jest.spyOn(global, 'fetch')
       .mockImplementation(() => Promise.resolve({
-        json: () => Promise.resolve(),
+        json: () => Promise.resolve(nameFood.meals[0]),
       }));
+
+    const nameRadio = screen.getByTestId('name-search-radio');
+    expect(nameRadio).toBeInTheDocument();
+    userEvent.click(nameRadio);
+    userEvent.type(searchInput, NAME);
+    userEvent.click(execBtn);
   });
 });
