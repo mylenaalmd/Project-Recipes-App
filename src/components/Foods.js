@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
 import context from '../context/context';
 import useFetch from '../hooks/useFetch';
 
@@ -21,9 +22,7 @@ function Foods() {
   const handleClick = (category) => {
     if (category === '' || filterAtual === category) {
       setUrlFood(initialUrlFood);
-      console.log('bora resetar');
     } else {
-      console.log('bora trocar a categoria');
       setUrlFood(`https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`);
     }
     setFilterAtual(category);
@@ -55,18 +54,19 @@ function Foods() {
           </div>
           <div className="cards">
             {dataFoods.map((food, index) => (
-              <div
-                key={ food.idMeal }
-                className="card"
-                data-testid={ `${index}-recipe-card` }
-              >
-                <img
-                  src={ food.strMealThumb }
-                  alt={ food.strMeal }
-                  data-testid={ `${index}-card-img` }
-                />
-                <h1 data-testid={ `${index}-card-name` }>{food.strMeal}</h1>
-              </div>
+              <Link to={ `/foods/${food.idMeal}` } key={ food.idMeal }>
+                <div
+                  className="card"
+                  data-testid={ `${index}-recipe-card` }
+                >
+                  <img
+                    src={ food.strMealThumb }
+                    alt={ food.strMeal }
+                    data-testid={ `${index}-card-img` }
+                  />
+                  <h1 data-testid={ `${index}-card-name` }>{food.strMeal}</h1>
+                </div>
+              </Link>
             ))}
           </div>
         </div>)}

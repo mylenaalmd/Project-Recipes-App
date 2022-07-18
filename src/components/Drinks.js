@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { Link } from 'react-router-dom';
 import context from '../context/context';
 import useFetch from '../hooks/useFetch';
 
@@ -21,9 +22,7 @@ function Drinks() {
   const handleClick = (category) => {
     if (category === '' || filterAtual === category) {
       setUrlDrinks(initialUrlDrinks);
-      console.log('bora resetar');
     } else {
-      console.log('bora trocar a categoria');
       setUrlDrinks(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`);
     }
     setFilterAtual(category);
@@ -54,18 +53,19 @@ function Drinks() {
           </div>
           <div className="cards">
             {dataDrinks.map((drink, index) => (
-              <div
-                key={ drink.idDrink }
-                className="card"
-                data-testid={ `${index}-recipe-card` }
-              >
-                <img
-                  src={ drink.strDrinkThumb }
-                  alt={ drink.strDrink }
-                  data-testid={ `${index}-card-img` }
-                />
-                <h1 data-testid={ `${index}-card-name` }>{drink.strDrink}</h1>
-              </div>
+              <Link to={ `/drinks/${drink.idDrink}` } key={ drink.idDrink }>
+                <div
+                  className="card"
+                  data-testid={ `${index}-recipe-card` }
+                >
+                  <img
+                    src={ drink.strDrinkThumb }
+                    alt={ drink.strDrink }
+                    data-testid={ `${index}-card-img` }
+                  />
+                  <h1 data-testid={ `${index}-card-name` }>{drink.strDrink}</h1>
+                </div>
+              </Link>
             ))}
           </div>
         </div>)}
