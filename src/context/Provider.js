@@ -14,6 +14,8 @@ function Provider({ children }) {
   const [dataFoodsCategory, setDataFoodsCategory] = useState([]);
   const [dataDrinks, setDataDrinks] = useState([]);
   const [dataDrinksCategory, setDataDrinksCategory] = useState([]);
+  const [dataFood, setDataFood] = useState([]);
+  const [dataDrink, setDataDrink] = useState([]);
 
   // useFetch(urlFood, setDataFoods, MAX_RECIPES, 'meals');
   // useFetch(urlFoodCategory, setDataFoodsCategory, MAX_CATEGORIES, 'meals');
@@ -29,6 +31,10 @@ function Provider({ children }) {
     setDataDrinks,
     dataDrinksCategory,
     setDataDrinksCategory,
+    dataFood,
+    setDataFood,
+    dataDrink,
+    setDataDrink,
   };
   return (
     <Context.Provider value={ context }>
