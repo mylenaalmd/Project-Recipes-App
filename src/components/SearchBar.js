@@ -18,7 +18,7 @@ function SearchBar({ title }) {
     if (result.meals.length === 1) {
       history.push(`/foods/${result.meals[0].idMeal}`);
     } else {
-      setDataFoods(result);
+      setDataFoods(result.meals);
     }
   };
 
@@ -26,7 +26,7 @@ function SearchBar({ title }) {
     if (result.drinks.length === 1) {
       history.push(`/drinks/${result.drinks[0].idDrink}`);
     } else {
-      setDataDrinks(result);
+      setDataDrinks(result.drinks);
     }
   };
 
