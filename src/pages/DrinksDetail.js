@@ -3,15 +3,14 @@ import { useParams } from 'react-router-dom';
 import context from '../context/context';
 import useFetch from '../hooks/useFetch';
 
-const urlFoods = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
+// const urlFoods = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
 const MAX_RECIPES = 6;
 
 function Drinks() {
-  const { dataDrink, setDataDrink, dataFoods, setDataFoods } = useContext(context);
+  const { dataDrink, setDataDrink, dataFoods } = useContext(context);
   const { idRecipe } = useParams();
   const urlDrink = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${idRecipe}`;
   useFetch(urlDrink, setDataDrink, MAX_RECIPES, 'drinks');
-  useFetch(urlFoods, setDataFoods, MAX_RECIPES, 'meals');
   return (
     <div className="detail">
       {dataDrink.map((drink) => (
@@ -37,7 +36,7 @@ function Drinks() {
               ))
           }
           <p data-testid="instructions">{drink.strInstructions}</p>
-          {dataFoods.map((food, index) => (
+          {dataFoods.map((food, index) => index < MAX_RECIPES && (
             <div
               key={ food.idMeal }
               className="card"
