@@ -15,7 +15,7 @@ const urlFoods = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
 
 function DrinksDetails({ history: { push }, location: { pathname } }) {
   const { dataDrink, setDataDrink, dataFoods,
-    recipesMade, doingRecipe, setDataFood } = useContext(context);
+    recipesMade, doingRecipe, setDataFoods } = useContext(context);
   const { idRecipe } = useParams();
   const [isCopied, setIsCopied] = useState(false);
   const [isFav, setIsFav] = useState(false);
@@ -67,7 +67,7 @@ function DrinksDetails({ history: { push }, location: { pathname } }) {
 
   const urlDrink = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${idRecipe}`;
   useFetch(urlDrink, setDataDrink, MAX_RECIPES, 'drinks');
-  useFetch(urlFoods, setDataFood, MAX_RECIPES, 'meals');
+  useFetch(urlFoods, setDataFoods, MAX_RECIPES, 'meals');
 
   return (
     <div className="detail">
@@ -115,7 +115,7 @@ function DrinksDetails({ history: { push }, location: { pathname } }) {
           {dataFoods.map((food, index) => (
             <div
               key={ food.idMeal }
-              className="card"
+              className="RecomendationCard"
               data-testid={ `${index}-recomendation-card` }
             >
               <img
@@ -139,6 +139,13 @@ function DrinksDetails({ history: { push }, location: { pathname } }) {
           )}
         </div>
       ))}
+      <button
+        type="button"
+        className="ButtonRecipe"
+        data-testid="start-recipe-btn"
+      >
+        Start Recipe
+      </button>
     </div>
   );
 }
