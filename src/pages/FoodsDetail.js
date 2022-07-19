@@ -1,15 +1,20 @@
 import React, { useContext } from 'react';
+import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 import context from '../context/context';
 import useFetch from '../hooks/useFetch';
 
 const MAX_RECIPES = 6;
+const urlDrink = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?s-';
 
-function Drinks() {
-  const { dataFood, setDataFood, dataDrinks } = useContext(context);
+function FoodDetails({ history: { push } }) {
+  const { dataFood, setDataFood, dataDrinks,
+    recipesMade, doingRecipe, setDataDrink } = useContext(context);
   const { idRecipe } = useParams();
   const urlFood = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idRecipe}`;
+  useFetch(urlDrink, setDataDrink, MAX_RECIPES, 'drinks');
   useFetch(urlFood, setDataFood, MAX_RECIPES, 'meals');
+
   return (
     <div className="detail">
       {dataFood.map((food) => (
@@ -36,7 +41,7 @@ function Drinks() {
           }
           <p data-testid="instructions">{food.strInstructions}</p>
           <iframe src={ food.strYoutube } title={ food.strMeal } data-testid="video" />
-          {dataDrinks.map((drink, index) => index < MAX_RECIPES && (
+          {dataDrinks.map((drink, index) => (
             <div
               key={ drink.idDrink }
               className="RecomendationCard"
@@ -49,10 +54,27 @@ function Drinks() {
               <h1>{drink.strDrink}</h1>
             </div>
           ))}
+          { recipesMade.some((made) => made.idMeal === food.idMeal) === false
+          && (
+            <button
+              className="btn-start-recipe"
+              data-testid="start-recipe-btn"
+              type="button"
+              onClick={ () => push() }
+            >
+              { doingRecipe.some((doing) => doing.idMeal === food.idMeal)
+                ? 'Continue Recipe' : 'Start Recipe' }
+            </button>
+          )}
         </div>
       ))}
     </div>
   );
 }
 
-export default Drinks;
+FoodDetails.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired }).isRequired,
+};
+
+export default FoodDetails;

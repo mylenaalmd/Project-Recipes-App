@@ -3,14 +3,17 @@ import { useParams } from 'react-router-dom';
 import context from '../context/context';
 import useFetch from '../hooks/useFetch';
 
-// const urlFoods = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
 const MAX_RECIPES = 6;
+const urlFoods = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
 
-function Drinks() {
-  const { dataDrink, setDataDrink, dataFoods } = useContext(context);
+function DrinksDetails() {
+  const { dataDrink, setDataDrink, dataFoods,
+    recipesMade, doingRecipe, setDataFood } = useContext(context);
   const { idRecipe } = useParams();
   const urlDrink = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${idRecipe}`;
+  useFetch(urlFoods, setDataFood, MAX_RECIPES, 'meals');
   useFetch(urlDrink, setDataDrink, MAX_RECIPES, 'drinks');
+
   return (
     <div className="detail">
       {dataDrink.map((drink) => (
@@ -36,7 +39,7 @@ function Drinks() {
               ))
           }
           <p data-testid="instructions">{drink.strInstructions}</p>
-          {dataFoods.map((food, index) => index < MAX_RECIPES && (
+          {dataFoods.map((food, index) => (
             <div
               key={ food.idMeal }
               className="card"
@@ -49,10 +52,22 @@ function Drinks() {
               <h1>{food.strMeal}</h1>
             </div>
           ))}
+          { recipesMade.some((made) => made.idDrink === drink.idDrink) === false
+          && (
+            <button
+              className="btn-start-recipe"
+              data-testid="start-recipe-btn"
+              type="button"
+              onClick={ () => push() }
+            >
+              { doingRecipe?.some((doing) => doing.idDrink === drink.idDrink)
+                ? 'Continue Recipe' : 'Start Recipe' }
+            </button>
+          )}
         </div>
       ))}
     </div>
   );
 }
 
-export default Drinks;
+export default DrinksDetails;
