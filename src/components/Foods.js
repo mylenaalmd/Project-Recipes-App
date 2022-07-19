@@ -53,7 +53,7 @@ function Foods() {
 
           </div>
           <div className="cards">
-            {dataFoods.map((food, index) => (
+            {dataFoods && dataFoods.map((food, index) => (
               <Link to={ `/foods/${food.idMeal}` } key={ food.idMeal }>
                 <div
                   className="card"

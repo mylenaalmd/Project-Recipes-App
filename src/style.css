@@ -44,3 +44,9 @@
 .ButtonRecipe {
   width: 100%;
 }
+
+.btn-start-recipe {
+  bottom: 0;
+  left: 15vh;
+  position: fixed;
+}
