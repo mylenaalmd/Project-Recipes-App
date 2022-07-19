@@ -6,7 +6,7 @@ import useFetch from '../hooks/useFetch';
 const urlFoods = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
 const MAX_RECIPES = 6;
 
-function Drinks() {
+function DrinksDetails() {
   const { dataDrink, setDataDrink, dataFoods, setDataFoods } = useContext(context);
   const { idRecipe } = useParams();
   const urlDrink = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${idRecipe}`;
@@ -40,7 +40,7 @@ function Drinks() {
           {dataFoods.map((food, index) => (
             <div
               key={ food.idMeal }
-              className="card"
+              className="RecomendationCard"
               data-testid={ `${index}-recomendation-card` }
             >
               <img
@@ -52,8 +52,15 @@ function Drinks() {
           ))}
         </div>
       ))}
+      <button
+        type="button"
+        className="ButtonRecipe"
+        data-testid="start-recipe-btn"
+      >
+        Start Recipe
+      </button>
     </div>
   );
 }
 
-export default Drinks;
+export default DrinksDetails;

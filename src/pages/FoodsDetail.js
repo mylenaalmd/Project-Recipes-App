@@ -6,7 +6,7 @@ import useFetch from '../hooks/useFetch';
 const urlDrinks = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
 const MAX_RECIPES = 6;
 
-function Drinks() {
+function FoodsDetails() {
   const { dataFood, setDataFood, dataDrinks, setDataDrinks } = useContext(context);
   const { idRecipe } = useParams();
   const urlFood = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idRecipe}`;
@@ -38,23 +38,32 @@ function Drinks() {
           }
           <p data-testid="instructions">{food.strInstructions}</p>
           <iframe src={ food.strYoutube } title={ food.strMeal } data-testid="video" />
-          {dataDrinks.map((drink, index) => (
-            <div
-              key={ drink.idDrink }
-              className="RecomendationCard"
-              data-testid={ `${index}-recomendation-card` }
-            >
-              <img
-                src={ drink.strDrinkThumb }
-                alt={ drink.strDrink }
-              />
-              <h1>{drink.strDrink}</h1>
-            </div>
-          ))}
+          <div className="slider">
+            {dataDrinks.map((drink, index) => (
+              <div
+                key={ drink.idDrink }
+                className="RecomendationCard"
+                data-testid={ `${index}-recomendation-card` }
+              >
+                <img
+                  src={ drink.strDrinkThumb }
+                  alt={ drink.strDrink }
+                />
+                <h1>{drink.strDrink}</h1>
+              </div>
+            ))}
+          </div>
         </div>
       ))}
+      <button
+        type="button"
+        className="ButtonRecipe"
+        data-testid="start-recipe-btn"
+      >
+        Start Recipe
+      </button>
     </div>
   );
 }
 
-export default Drinks;
+export default FoodsDetails;
