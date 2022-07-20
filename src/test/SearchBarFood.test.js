@@ -58,7 +58,7 @@ describe('Testes do componente SearchBar - foods', () => {
     expect(foodWithCheese).toBeInTheDocument();
     expect(foodWithCheese2).toBeInTheDocument();
     expect(global.fetch).toBeCalled();
-    expect(global.fetch).toBeCalledWith('https://www.themealdb.com/api/json/v1/1/filter.php?i=cheese');
+    expect(global.fetch).toBeCalledWith(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${INGREDIENT}`);
   });
 
   it('Testa se consegue buscar pelo nome (food)', async () => {
@@ -90,7 +90,7 @@ describe('Testes do componente SearchBar - foods', () => {
     expect(foodNameBig).toBeInTheDocument();
     expect(foodNameBig2).toBeInTheDocument();
     expect(global.fetch).toBeCalled();
-    expect(global.fetch).toBeCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?s=big');
+    expect(global.fetch).toBeCalledWith(`https://www.themealdb.com/api/json/v1/1/search.php?s=${NAME}`);
   });
 
   it('Testa se consegue buscar pela primeira letra (food)', async () => {
@@ -122,7 +122,7 @@ describe('Testes do componente SearchBar - foods', () => {
     expect(foodWithA).toBeInTheDocument();
     expect(foodWithA2).toBeInTheDocument();
     expect(global.fetch).toBeCalled();
-    expect(global.fetch).toBeCalledWith('https://www.themealdb.com/api/json/v1/1/search.php?f=a');
+    expect(global.fetch).toBeCalledWith(`https://www.themealdb.com/api/json/v1/1/search.php?f=${FIRST_LETTER}`);
   });
 
   it('Testa se quando tem apenas uma comida, muda para a pag de details',
