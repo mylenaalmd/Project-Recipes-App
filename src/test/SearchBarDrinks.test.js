@@ -2,15 +2,18 @@ import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/react';
 import renderWithRouter from './helpers/renderWithRouter';
-import drinksAPI from './helpers/drinksAPI';
+import { drinksAPI } from './helpers/drinksAPI';
 import App from '../App';
 import { firstLetterDrink, abcDrink,
   ingredientDrink, nameDrink } from './helpers/searchAPI';
 
 describe('Testes do componente SearchBar - drinks', () => {
   let historyMock = '';
+  const ALERT_TXT = 'Your search must have only 1 (one) character';
 
   beforeEach(() => {
+    jest.spyOn(global, 'alert')
+      .mockImplementation(() => ALERT_TXT);
     jest.spyOn(global, 'fetch')
       .mockImplementation(() => Promise.resolve({
         json: () => Promise.resolve(drinksAPI),
@@ -28,6 +31,7 @@ describe('Testes do componente SearchBar - drinks', () => {
   const txtSearchBtn = 'search-top-btn';
   const txtSearchInput = 'search-input';
   const txtExecBtn = 'exec-search-btn';
+  const txtRadioFL = 'first-letter-search-radio';
 
   it('Testa se consegue buscar pelo ingrediente (drinks)', async () => {
     const searchTopBtn = screen.getByTestId(txtSearchBtn);
@@ -47,7 +51,7 @@ describe('Testes do componente SearchBar - drinks', () => {
         json: () => Promise.resolve(ingredientDrink),
       }));
 
-    const firstLetterRadio = screen.getByTestId('first-letter-search-radio');
+    const firstLetterRadio = screen.getByTestId(txtRadioFL);
     expect(firstLetterRadio).toBeInTheDocument();
     userEvent.click(firstLetterRadio);
     const ingredientRadio = screen.getByTestId('ingredient-search-radio');
@@ -114,7 +118,7 @@ describe('Testes do componente SearchBar - drinks', () => {
         json: () => Promise.resolve(firstLetterDrink),
       }));
 
-    const firstLetterRadio = screen.getByTestId('first-letter-search-radio');
+    const firstLetterRadio = screen.getByTestId(txtRadioFL);
     expect(firstLetterRadio).toBeInTheDocument();
     userEvent.click(firstLetterRadio);
     userEvent.type(searchInput, FIRST_LETTER);
@@ -128,56 +132,89 @@ describe('Testes do componente SearchBar - drinks', () => {
     expect(global.fetch).toBeCalledWith('https://www.thecocktaildb.com/api/json/v1/1/search.php?f=a');
   });
 
-  it('Testa se quando tem apenas uma bebida, muda para a pag de details', async () => {
+  it('Testa se quando tem apenas uma bebida, muda para a pag de details',
+    async () => {
+      jest.spyOn(global, 'fetch')
+        .mockImplementation(() => Promise.resolve({
+          json: () => Promise.resolve(abcDrink),
+        }));
+
+      const searchTopBtn = screen.getByTestId(txtSearchBtn);
+      expect(searchTopBtn).toBeInTheDocument();
+      userEvent.click(searchTopBtn);
+
+      const searchInput = screen.getByTestId(txtSearchInput);
+      const execBtn = screen.getByTestId(txtExecBtn);
+
+      expect(searchInput).toBeInTheDocument();
+      expect(execBtn).toBeInTheDocument();
+
+      const NAME = 'ABC';
+
+      const nameRadio = screen.getByTestId('name-search-radio');
+      expect(nameRadio).toBeInTheDocument();
+      userEvent.click(nameRadio);
+      userEvent.type(searchInput, NAME);
+      userEvent.click(execBtn);
+
+      expect(global.fetch).toBeCalledWith('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=ABC');
+
+      const cardDrink = await screen.findByTestId('recipe-title');
+      expect(cardDrink).toBeInTheDocument();
+
+      const { pathname } = historyMock.location;
+      expect(pathname).toBe(`/drinks/${abcDrink.drinks[0].idDrink}`);
+    });
+
+  it('Testa mensagem de alerta quando não encontra resultados', () => {
+    jest.spyOn(global, 'fetch')
+      .mockImplementation(() => Promise.resolve({
+        json: () => Promise.resolve({ drinks: null }),
+      }));
+
+    const TXT = 'JDUHF';
     const searchTopBtn = screen.getByTestId(txtSearchBtn);
     expect(searchTopBtn).toBeInTheDocument();
     userEvent.click(searchTopBtn);
 
     const searchInput = screen.getByTestId(txtSearchInput);
+    const ingredientRadio = screen.getByTestId('ingredient-search-radio');
     const execBtn = screen.getByTestId(txtExecBtn);
 
     expect(searchInput).toBeInTheDocument();
+    expect(ingredientRadio).toBeInTheDocument();
     expect(execBtn).toBeInTheDocument();
 
-    const NAME = 'Coffee';
-
-    jest.spyOn(global, 'fetch')
-      .mockImplementation(() => Promise.resolve({
-        json: () => Promise.resolve(abcDrink),
-      }));
-
-    const nameRadio = screen.getByTestId('name-search-radio');
-    expect(nameRadio).toBeInTheDocument();
-    userEvent.click(nameRadio);
-    userEvent.type(searchInput, NAME);
+    userEvent.type(searchInput, TXT);
+    userEvent.click(ingredientRadio);
     userEvent.click(execBtn);
 
-    const { pathname } = historyMock.location;
-    expect(pathname).toBe(`/drinks/${abcDrink.drinks[0].idDrink}`);
+    expect(global.alert()).toBe(ALERT_TXT);
+    expect(global.alert).toBeCalled();
   });
 
-  it('Verifica mensagem de alerta', () => {
-    const searchTopBtn = screen.getByTestId(txtSearchBtn);
-    expect(searchTopBtn).toBeInTheDocument();
-    userEvent.click(searchTopBtn);
+  it('Testa mensagem de alerta quando há mais de uma letra (search: first letter)',
+    async () => {
+      const searchTopBtn = screen.getByTestId(txtSearchBtn);
+      expect(searchTopBtn).toBeInTheDocument();
+      userEvent.click(searchTopBtn);
 
-    const searchInput = screen.getByTestId(txtSearchInput);
-    const execBtn = screen.getByTestId(txtExecBtn);
+      const searchInput = screen.getByTestId(txtSearchInput);
+      const execBtn = screen.getByTestId(txtExecBtn);
 
-    expect(searchInput).toBeInTheDocument();
-    expect(execBtn).toBeInTheDocument();
+      expect(searchInput).toBeInTheDocument();
+      expect(execBtn).toBeInTheDocument();
 
-    const ALERT_TXT = 'Sorry, we haven\'t found any recipes for these filters.';
+      const FIRST_LETTER = 'ab';
 
-    jest.spyOn(global, 'fetch')
-      .mockImplementation(() => Promise.resolve({
-        json: () => Promise.resolve({
-          drinks: null,
-        }),
-      }));
+      const firstLetterRadio = screen.getByTestId(txtRadioFL);
+      expect(firstLetterRadio).toBeInTheDocument();
 
-    userEvent.click(execBtn);
+      userEvent.type(searchInput, FIRST_LETTER);
+      userEvent.click(firstLetterRadio);
+      userEvent.click(execBtn);
 
-    expect(global.alert.name).toBe(ALERT_TXT);
-  });
+      expect(global.alert()).toBe(ALERT_TXT);
+      expect(global.alert).toBeCalled();
+    });
 });

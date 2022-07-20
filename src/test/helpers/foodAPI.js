@@ -1,4 +1,4 @@
-const foodAPI = {
+export const foodAPI = {
   meals: [
     {
       idMeal: '52977',
@@ -12,44 +12,6 @@ const foodAPI = {
       strYoutube: 'https://www.youtube.com/watch?v=VVnZd8A84z4',
       strIngredient1: 'Lentils',
       strIngredient2: 'Onion',
-      strIngredient3: 'Carrots',
-      strIngredient4: 'Tomato Puree',
-      strIngredient5: 'Cumin',
-      strIngredient6: 'Paprika',
-      strIngredient7: 'Mint',
-      strIngredient8: 'Thyme',
-      strIngredient9: 'Black Pepper',
-      strIngredient10: 'Red Pepper Flakes',
-      strIngredient11: 'Vegetable Stock',
-      strIngredient12: 'Water',
-      strIngredient13: 'Sea Salt',
-      strIngredient14: '',
-      strIngredient15: '',
-      strIngredient16: '',
-      strIngredient17: '',
-      strIngredient18: '',
-      strIngredient19: '',
-      strIngredient20: '',
-      strMeasure1: '1 cup ',
-      strMeasure2: '1 large',
-      strMeasure3: '1 large',
-      strMeasure4: '1 tbs',
-      strMeasure5: '2 tsp',
-      strMeasure6: '1 tsp ',
-      strMeasure7: '1/2 tsp',
-      strMeasure8: '1/2 tsp',
-      strMeasure9: '1/4 tsp',
-      strMeasure10: '1/4 tsp',
-      strMeasure11: '4 cups ',
-      strMeasure12: '1 cup ',
-      strMeasure13: 'Pinch',
-      strMeasure14: ' ',
-      strMeasure15: ' ',
-      strMeasure16: ' ',
-      strMeasure17: ' ',
-      strMeasure18: ' ',
-      strMeasure19: ' ',
-      strMeasure20: ' ',
       strSource: 'https://findingtimeforcooking.com/main-dishes/red-lentil-soup-corba/',
       strImageSource: null,
       strCreativeCommonsConfirmed: null,
@@ -62,6 +24,85 @@ const foodAPI = {
       strCategory: 'Side',
       strArea: 'Croatian',
       strInstructions: 'Fry the finely chopped onions and minced meat in oil. Add the...',
+      strMealThumb: 'https://www.themealdb.com/images/media/meals/tkxquw1628771028.jpg',
+      strTags: 'Streetfood, Onthego',
+      strYoutube: 'https://www.youtube.com/watch?v=YsJXZwE5pdY',
+      strIngredient1: 'Filo Pastry',
+      strIngredient2: 'Minced Beef',
+      strIngredient3: 'Onion',
+      strIngredient4: 'Oil',
+      strSource: 'https://www.visit-croatia.co.uk/croatian-cuisine/croatian-recipes/',
+      strImageSource: null,
+      strCreativeCommonsConfirmed: null,
+      dateModified: null,
+    }] };
+
+export const foodCategories = { meals: [
+  {
+    strCategory: 'Beef',
+  },
+  {
+    strCategory: 'Breakfast',
+  },
+  {
+    strCategory: 'Chicken',
+  },
+  {
+    strCategory: 'Dessert',
+  },
+  {
+    strCategory: 'Goat',
+  },
+  {
+    strCategory: 'Lamb',
+  },
+  {
+    strCategory: 'Miscellaneous',
+  },
+  {
+    strCategory: 'Pasta',
+  },
+  {
+    strCategory: 'Pork',
+  },
+  {
+    strCategory: 'Seafood',
+  },
+  {
+    strCategory: 'Side',
+  },
+  {
+    strCategory: 'Starter',
+  },
+  {
+    strCategory: 'Vegan',
+  },
+  {
+    strCategory: 'Vegetarian',
+  },
+] };
+
+export const foodBreakfast = { meals: [
+  {
+    strMeal: 'Breakfast Potatoes',
+    strMealThumb: 'https://www.themealdb.com/images/media/meals/1550441882.jpg',
+    idMeal: '52965',
+  },
+  {
+    strMeal: 'English Breakfast',
+    strMealThumb: 'https://www.themealdb.com/images/media/meals/utxryw1511721587.jpg',
+    idMeal: '52895',
+  }] };
+
+export const burek = {
+  meals: [
+    {
+      idMeal: '53060',
+      strMeal: 'Burek',
+      strDrinkAlternate: null,
+      strCategory: 'Side',
+      strArea: 'Croatian',
+      strInstructions: 'Fry the finely chopped onions and minced meat in oil. Add...',
       strMealThumb: 'https://www.themealdb.com/images/media/meals/tkxquw1628771028.jpg',
       strTags: 'Streetfood, Onthego',
       strYoutube: 'https://www.youtube.com/watch?v=YsJXZwE5pdY',
@@ -109,6 +150,6 @@ const foodAPI = {
       strImageSource: null,
       strCreativeCommonsConfirmed: null,
       dateModified: null,
-    }] };
-
-export default foodAPI;
+    },
+  ],
+};
