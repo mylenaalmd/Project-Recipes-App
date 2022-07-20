@@ -40,7 +40,7 @@ Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
 });
 
-describe('Testes do componente FoodDetails', () => {
+describe('Testes do componente DrinkDetails', () => {
   const customBeforeEach = (initialStorage) => {
     jest.spyOn(global, 'fetch')
       .mockImplementation(() => Promise.resolve({

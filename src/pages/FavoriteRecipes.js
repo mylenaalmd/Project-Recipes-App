@@ -9,12 +9,12 @@ const copy = require('clipboard-copy');
 const THREE_SECONDS = 3000;
 
 function FavoriteRecipes() {
-  const [favs, setFavs] = useState([{}]);
+  const [favs, setFavs] = useState([]);
   const [isCopied, setIsCopied] = useState(false);
   const [filter, setFilter] = useState('all');
   useEffect(() => {
-    const initial = () => {
-      const favRecipes = JSON.parse(localStorage.getItem('favoriteRecipes'));
+    const initial = async () => {
+      const favRecipes = await JSON.parse(localStorage.getItem('favoriteRecipes'));
       setFavs(favRecipes);
     };
 
@@ -38,6 +38,7 @@ function FavoriteRecipes() {
   return (
     <section>
       <Header title="Favorite Recipes" isSearch={ false } />
+      { isCopied && (<p>Link copied!</p>)}
       <button
         type="button"
         onClick={ () => setFilter('food') }
@@ -77,7 +78,7 @@ function FavoriteRecipes() {
                 { recipe.type === 'food' ? (`${recipe.nationality} - ${recipe.category}`)
                   : (recipe.alcoholicOrNot) }
               </p>
-              { isCopied && (<p>Link copied!</p>)}
+
               <button
                 type="button"
                 onClick={ () => showMessagem(`http://localhost:3000/${recipe.type}s/${recipe.id}`) }
@@ -94,7 +95,6 @@ function FavoriteRecipes() {
               >
                 <img
                   data-testid={ `${index}-horizontal-favorite-btn` }
-                  d
                   alt="favorite-btn"
                   src={ blackHeart }
                 />
