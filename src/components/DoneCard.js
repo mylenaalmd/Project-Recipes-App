@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import shareIcon from '../images/shareIcon.svg';
 
 function DoneCard({ recipe, index }) {
   // const recipeTags = recipe.tags ? recipe.tags.splice(0, 2) : [];
+  const [copied, setCopied] = useState(false);
   return (
     <section>
       <div className="cards">
@@ -32,11 +34,17 @@ function DoneCard({ recipe, index }) {
         >
           {recipe.doneDate}
         </p>
-        <img
-          src={ shareIcon }
-          alt="share icon"
-          data-testid={ `${index}-horizontal-share-btn` }
-        />
+        <CopyToClipboard
+          text={ `http://localhost:3000/${recipe.type}s/${recipe.id}` }
+          onCopy={ () => setCopied(true) }
+        >
+          <img
+            src={ shareIcon }
+            alt="share icon"
+            data-testid={ `${index}-horizontal-share-btn` }
+          />
+        </CopyToClipboard>
+        {copied ? <span>Link copied!</span> : null}
         <div>
           { recipe.tags && recipe.tags.filter((element, i) => i < 2 && element)
             .map((el) => (
