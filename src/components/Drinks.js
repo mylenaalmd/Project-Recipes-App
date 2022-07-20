@@ -19,7 +19,7 @@ function Drinks() {
   useFetch(urlDrinks, setDataDrinks, MAX_RECIPES, 'drinks');
   useFetch(urlDrinksCategory, setDataDrinksCategory, MAX_CATEGORIES, 'drinks');
 
-  const handleClick = (category) => {
+  const toggleClick = (category) => {
     if (category === '' || filterAtual === category) {
       setUrlDrinks(initialUrlDrinks);
     } else {
@@ -36,7 +36,7 @@ function Drinks() {
               type="button"
               key="All"
               data-testid="All-category-filter"
-              onClick={ () => handleClick('') }
+              onClick={ () => toggleClick('') }
             >
               All
             </button>
@@ -46,7 +46,7 @@ function Drinks() {
                   type="button"
                   key={ strCategory }
                   data-testid={ `${strCategory}-category-filter` }
-                  onClick={ () => handleClick(strCategory) }
+                  onClick={ () => toggleClick(strCategory) }
                 >
                   {strCategory}
                 </button>))}

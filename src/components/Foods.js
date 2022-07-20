@@ -19,7 +19,7 @@ function Foods() {
   useFetch(urlFood, setDataFoods, MAX_RECIPES, 'meals');
   useFetch(urlFoodCategory, setDataFoodsCategory, MAX_CATEGORIES, 'meals');
 
-  const handleClick = (category) => {
+  const toggleFilter = (category) => {
     if (category === '' || filterAtual === category) {
       setUrlFood(initialUrlFood);
     } else {
@@ -36,7 +36,7 @@ function Foods() {
               type="button"
               key="All"
               data-testid="All-category-filter"
-              onClick={ () => handleClick('') }
+              onClick={ () => toggleFilter('') }
             >
               All
             </button>
@@ -46,7 +46,7 @@ function Foods() {
                   type="button"
                   key={ strCategory }
                   data-testid={ `${strCategory}-category-filter` }
-                  onClick={ () => handleClick(strCategory) }
+                  onClick={ () => toggleFilter(strCategory) }
                 >
                   {strCategory}
                 </button>))}
