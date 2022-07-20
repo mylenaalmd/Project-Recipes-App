@@ -59,7 +59,16 @@ function RecipesInProgressDrink() {
                     key={ key }
                     data-testid={ `${index}-ingredient-step` }
                   >
-                    <p>{`${drink[`strMeasure${index + 1}`]} ${drink[key]}`}</p>
+                    <label htmlFor="checkbox">
+                      <input
+                        className="checkboxIngredient"
+                        type="checkbox"
+                        value="checkbox"
+                      />
+                    </label>
+                    <p>
+                      {`${drink[`strMeasure${index + 1}`]} ${drink[key]}`}
+                    </p>
                   </div>
                 )
               ))
