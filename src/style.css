@@ -25,6 +25,10 @@
   margin-left: 20px;
 }
 
+img {
+  max-width: 80vh;
+}
+
 .cards img {
   max-width: 100px;
 }
