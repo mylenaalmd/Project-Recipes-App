@@ -65,7 +65,7 @@ describe('Testes do componente SearchBar - drinks', () => {
     expect(foodWithVodka).toBeInTheDocument();
     expect(foodWithVodka2).toBeInTheDocument();
     expect(global.fetch).toBeCalled();
-    expect(global.fetch).toBeCalledWith('https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=vodka');
+    expect(global.fetch).toBeCalledWith(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${INGREDIENT}`);
   });
 
   it('Testa se consegue buscar pelo nome (drinks)', async () => {
@@ -97,7 +97,7 @@ describe('Testes do componente SearchBar - drinks', () => {
     expect(drinkName).toBeInTheDocument();
     expect(drinkName2).toBeInTheDocument();
     expect(global.fetch).toBeCalled();
-    expect(global.fetch).toBeCalledWith('https://www.thecocktaildb.com/api/json/v1/1/search.php?s=Coffee');
+    expect(global.fetch).toBeCalledWith(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${NAME}`);
   });
 
   it('Testa se consegue buscar pela primeira letra (drinks)', async () => {
@@ -129,7 +129,7 @@ describe('Testes do componente SearchBar - drinks', () => {
     expect(drinkWithA).toBeInTheDocument();
     expect(drinkWithA2).toBeInTheDocument();
     expect(global.fetch).toBeCalled();
-    expect(global.fetch).toBeCalledWith('https://www.thecocktaildb.com/api/json/v1/1/search.php?f=a');
+    expect(global.fetch).toBeCalledWith(`https://www.thecocktaildb.com/api/json/v1/1/search.php?f=${FIRST_LETTER}`);
   });
 
   it('Testa se quando tem apenas uma bebida, muda para a pag de details',

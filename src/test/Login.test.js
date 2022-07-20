@@ -27,8 +27,6 @@ Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
 });
 
-export default localStorageMock;
-
 describe('Testes da tela de Login', () => {
   it('Testa se ao colocar email e senha válidose inválidos', () => {
     renderWithRouter(<Login />);

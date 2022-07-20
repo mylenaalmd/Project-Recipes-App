@@ -71,7 +71,7 @@ function DrinksDetails({ history: { push }, location: { pathname } }) {
 
   return (
     <div className="detail">
-      {dataDrink.map((drink) => (
+      {dataDrink.length > 0 && dataDrink.map((drink) => (
         <div
           key={ drink.idDrink }
           className="card"
@@ -112,19 +112,6 @@ function DrinksDetails({ history: { push }, location: { pathname } }) {
               ))
           }
           <p data-testid="instructions">{drink.strInstructions}</p>
-          {dataFoods.map((food, index) => (
-            <div
-              key={ food.idMeal }
-              className="RecomendationCard"
-              data-testid={ `${index}-recomendation-card` }
-            >
-              <img
-                src={ food.strMealThumb }
-                alt={ food.strMeal }
-              />
-              <h1>{food.strMeal}</h1>
-            </div>
-          ))}
           { recipesMade.some((made) => made.idDrink === drink.idDrink) === false
           && (
             <button
@@ -139,13 +126,19 @@ function DrinksDetails({ history: { push }, location: { pathname } }) {
           )}
         </div>
       ))}
-      <button
-        type="button"
-        className="ButtonRecipe"
-        data-testid="start-recipe-btn"
-      >
-        Start Recipe
-      </button>
+      {dataFoods.length > 0 && dataFoods.map((food, index) => (
+        <div
+          key={ food.idMeal }
+          className="RecomendationCard"
+          data-testid={ `${index}-recomendation-card` }
+        >
+          <img
+            src={ food.strMealThumb }
+            alt={ food.strMeal }
+          />
+          <h1>{food.strMeal}</h1>
+        </div>
+      ))}
     </div>
   );
 }

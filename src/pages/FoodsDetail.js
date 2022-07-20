@@ -25,7 +25,7 @@ function FoodDetails({ history: { push }, location: { pathname } }) {
       const alreadyFav = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
       if (alreadyFav.length === 0) return setIsFav(false);
       if (dataFood.length === 1) {
-        const some = alreadyFav.some((meal) => meal.id === dataFood[0].idMeal);
+        const some = alreadyFav.some((meal) => meal?.id === dataFood[0].idMeal);
         setIsFav(some);
       }
     };
@@ -71,7 +71,7 @@ function FoodDetails({ history: { push }, location: { pathname } }) {
 
   return (
     <div className="detail">
-      {dataFood.map((food) => (
+      {dataFood.length > 0 && dataFood.map((food) => (
         <div
           key={ food.idMeal }
           className="card"
@@ -113,19 +113,6 @@ function FoodDetails({ history: { push }, location: { pathname } }) {
           }
           <p data-testid="instructions">{food.strInstructions}</p>
           <iframe src={ food.strYoutube } title={ food.strMeal } data-testid="video" />
-          {dataDrink.map((drink, index) => (
-            <div
-              key={ drink.idDrink }
-              className="RecomendationCard"
-              data-testid={ `${index}-recomendation-card` }
-            >
-              <img
-                src={ drink.strDrinkThumb }
-                alt={ drink.strDrink }
-              />
-              <h1>{drink.strDrink}</h1>
-            </div>
-          ))}
           { recipesMade.some((made) => made.idMeal === food.idMeal) === false
           && (
             <button
@@ -138,6 +125,19 @@ function FoodDetails({ history: { push }, location: { pathname } }) {
                 ? 'Continue Recipe' : 'Start Recipe' }
             </button>
           )}
+        </div>
+      ))}
+      {dataDrink.length > 0 && dataDrink.map((drink, index) => (
+        <div
+          key={ drink.idDrink }
+          className="RecomendationCard"
+          data-testid={ `${index}-recomendation-card` }
+        >
+          <img
+            src={ drink.strDrinkThumb }
+            alt={ drink.strDrink }
+          />
+          <h1>{drink.strDrink}</h1>
         </div>
       ))}
     </div>
