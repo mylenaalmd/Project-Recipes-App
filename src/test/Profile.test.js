@@ -32,8 +32,9 @@ Object.defineProperty(window, 'localStorage', {
 
 describe('Testes da página Profile', () => {
   it('Testa o redirecionamento para DoneRecipes', () => {
+    localStorageMock.setItem('doneRecipes', '[]');
+    localStorage.setItem('user', JSON.stringify({ email: EMAIL }));
     const { history } = renderWithRouter(<App />);
-    localStorageMock.setItem('user', JSON.stringify({ email: EMAIL }));
     history.push('/profile');
 
     const linkDone = screen.getByTestId('profile-done-btn');
@@ -46,7 +47,7 @@ describe('Testes da página Profile', () => {
 
   it('Testa o redirecionamento para Favorites', () => {
     const { history } = renderWithRouter(<App />);
-    localStorageMock.setItem('user', JSON.stringify({ email: EMAIL }));
+    localStorage.setItem('user', JSON.stringify({ email: EMAIL }));
     history.push('/profile');
 
     const linkFavorite = screen.getByTestId('profile-favorite-btn');
@@ -59,7 +60,7 @@ describe('Testes da página Profile', () => {
 
   it('Testa o funcionamento do botão logout', () => {
     const { history } = renderWithRouter(<App />);
-    localStorageMock.setItem('user', JSON.stringify({ email: EMAIL }));
+    localStorage.setItem('user', JSON.stringify({ email: EMAIL }));
     history.push('/profile');
 
     const logoutBtn = screen.getByTestId('profile-logout-btn');
