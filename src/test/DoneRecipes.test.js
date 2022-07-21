@@ -86,4 +86,16 @@ describe('Testes do componente Done Recipes', () => {
       expect(drinkName()).toBeInTheDocument();
       expect(foodName()).not.toBeInTheDocument();
     });
+
+  // https://stackoverflow.com/questions/50023902/how-can-document-execcommand-be-unit-te
+
+  it('Testa se o botão de compartilhar funciona',
+    async () => {
+      window.document.execCommand = function execCommandMock() { return 'click'; };
+      const shareBtn = screen.getByTestId('0-horizontal-share-btn');
+      userEvent.click(shareBtn);
+
+      const copiedMessage = await screen.findByText(/link copied!/i);
+      expect(copiedMessage).toBeInTheDocument();
+    });
 });
