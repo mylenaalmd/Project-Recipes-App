@@ -9,7 +9,7 @@ const copy = require('clipboard-copy');
 const THREE_SECONDS = 3000;
 
 function FavoriteRecipes() {
-  const [favs, setFavs] = useState([]);
+  const [favs, setFavs] = useState();
   const [isCopied, setIsCopied] = useState(false);
   const [filter, setFilter] = useState('all');
   useEffect(() => {
@@ -61,7 +61,7 @@ function FavoriteRecipes() {
         All
       </button>
       {
-        favs.filter((curr) => (filter === 'all' ? curr : (curr.type === filter)))
+        favs?.filter((curr) => (filter === 'all' ? curr : (curr.type === filter)))
           .map((recipe, index) => (
             <div className="card" key={ recipe.id }>
               <Link to={ `/${recipe.type}s/${recipe.id}` }>
