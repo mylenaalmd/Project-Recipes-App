@@ -1,9 +1,9 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import renderWithRouter from './helpers/renderWithRouter';
-import App from '../App';
-import { drinksAPI, drinksShake, drinksCategory } from './helpers/drinksAPI';
+import renderWithRouter from './src/test/helpers/renderWithRouter';
+import App from './src/App';
+import { drinksAPI, drinksShake, drinksCategory } from './src/test/helpers/drinksAPI';
 
 describe('Testes do componente Drinks', () => {
   afterEach(() => {
