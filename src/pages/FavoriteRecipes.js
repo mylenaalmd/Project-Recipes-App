@@ -61,7 +61,7 @@ function FavoriteRecipes() {
         All
       </button>
       {
-        favs?.filter((curr) => (filter === 'all' ? curr : (curr.type === filter)))
+        favs && favs.filter((curr) => (filter === 'all' ? curr : (curr.type === filter)))
           .map((recipe, index) => (
             <div className="card" key={ recipe.id }>
               <Link to={ `/${recipe.type}s/${recipe.id}` }>
