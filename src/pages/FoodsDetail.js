@@ -127,19 +127,21 @@ function FoodDetails({ history: { push }, location: { pathname } }) {
           )}
         </div>
       ))}
-      {dataDrink.length > 0 && dataDrink.map((drink, index) => (
-        <div
-          key={ drink.idDrink }
-          className="RecomendationCard"
-          data-testid={ `${index}-recomendation-card` }
-        >
-          <img
-            src={ drink.strDrinkThumb }
-            alt={ drink.strDrink }
-          />
-          <h1>{drink.strDrink}</h1>
-        </div>
-      ))}
+      <div className="carouselItems">
+        {dataDrink.length > 0 && dataDrink.map((drink, index) => (
+          <div
+            key={ drink.idDrink }
+            className="RecomendationCard"
+            data-testid={ `${index}-recomendation-card` }
+          >
+            <img
+              src={ drink.strDrinkThumb }
+              alt={ drink.strDrink }
+            />
+            <h1>{drink.strDrink}</h1>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
