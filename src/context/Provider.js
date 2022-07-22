@@ -27,8 +27,8 @@ function Provider({ children }) {
   useEffect(() => {
     const getDoing = () => {
       const doing = JSON.parse(localStorage.getItem('inProgressRecipes'));
-      if (doing.meals) setDoingRecipe(Object.keys(doing.meals));
-      if (doing.cocktails) setDoingRecipe(Object.keys(doing.cocktails));
+      if (doing?.meals) setDoingRecipe(Object.keys(doing.meals));
+      if (doing?.cocktails) setDoingRecipe(Object.keys(doing.cocktails));
     };
     getDoing();
   }, []);
