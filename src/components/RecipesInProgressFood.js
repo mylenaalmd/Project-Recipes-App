@@ -1,7 +1,8 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { useParams, useHistory, useLocation } from 'react-router-dom';
 // import PropTypes from 'prop-types';
-import useFetch from '../hooks/useFetch';
+// import useFetch from '../hooks/useFetch';
+import useFetchIngredients from '../hooks/useFetchIngredients';
 import context from '../context/context';
 import blackHeart from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
@@ -9,21 +10,23 @@ import whiteHeart from '../images/whiteHeartIcon.svg';
 
 const copy = require('clipboard-copy');
 
-const THREE_SECONDS = 3000;
+// const THREE_SECONDS = 3000;
+
+// const laland = JSON.parse(localStorage.getItem('inProgressRecipes'));
 
 function RecipesInProgressFood() {
   const { pathname } = useLocation();
-  const rota = pathname.includes('foods') ? 'meals' : 'cocktails';
+  const rota = pathname.includes('foods') && 'meals';
   const { idRecipe } = useParams();
-  const [meals, setMeals] = useState({ [rota]: { [idRecipe]: [] } });
-  const { dataFood, setDataFood, setDoingRecipe, doingRecipe,
-    recipesMade, setRecipesMade } = useContext(context);
+  const INITIAL_STATE = { [rota]: { [idRecipe]: [] } };
+  const [meals, setMeals] = useState(INITIAL_STATE);
+  const { dataFood, setDataFood } = useContext(context);
   const history = useHistory();
-  const MAX_RECIPES = 1;
-  const [urlFood] = useState(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idRecipe}`);
-  useFetch(urlFood, setDataFood, MAX_RECIPES, 'meals');
+  const urlFood = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idRecipe}`;
   const [isCopied, setIsCopied] = useState(false);
   const [isFav, setIsFav] = useState(false);
+  const [ingredients, setIngredients] = useState([]);
+  useFetchIngredients(urlFood, setDataFood, setIngredients, 'meals');
 
   const saveCheckbox = (dado) => {
     setMeals((prev) => (
@@ -36,21 +39,33 @@ function RecipesInProgressFood() {
 
       }
     ));
-    setDoingRecipe([...doingRecipe, idRecipe]);
     // console.log(meals);
   };
+
+  useEffect(() => {
+    // const dataLocalStorage = () => {
+    const local = localStorage.getItem('inProgressRecipes');
+    if (local) {
+      let object = JSON.parse(local);
+      object = {
+        ...object,
+        meals: {
+          ...object?.meals,
+          ...meals[rota],
+        },
+      };
+      localStorage.setItem('inProgressRecipes', JSON.stringify(object));
+    } else {
+      localStorage.setItem('inProgressRecipes', JSON.stringify(meals));
+    }
+    // };
+    // dataLocalStorage();
+  }, [meals, rota]);
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem('inProgressRecipes'));
     setMeals(data === null ? { [rota]: { [idRecipe]: [] } } : data);
   }, [idRecipe, rota]);
-
-  useEffect(() => {
-    // const dataLocalStorage = () => {
-    localStorage.setItem('inProgressRecipes', JSON.stringify(meals));
-    // };
-    // dataLocalStorage();
-  }, [meals]);
 
   useEffect(() => {
     const changeIsFav = () => {
@@ -61,16 +76,15 @@ function RecipesInProgressFood() {
         setIsFav(some);
       }
     };
-
     changeIsFav();
   }, [dataFood]);
 
   const showMessagem = () => {
     setIsCopied(true);
     copy(`http://localhost:3000/foods/${idRecipe}`);
-    setTimeout(() => {
-      setIsCopied(false);
-    }, THREE_SECONDS);
+    // setTimeout(() => {
+    //   setIsCopied(false);
+    // }, THREE_SECONDS);
   };
 
   const favoriteRecipe = (change) => {
@@ -95,13 +109,6 @@ function RecipesInProgressFood() {
       localStorage.setItem('favoriteRecipes', JSON.stringify(filtered));
       setIsFav(false);
     }
-  };
-
-  const handleFinish = () => {
-    history.push('/done-recipes');
-    const filtered = doingRecipe.filter((curr) => curr !== idRecipe);
-    setDoingRecipe(filtered);
-    setRecipesMade([...recipesMade, idRecipe]);
   };
 
   return (
@@ -139,48 +146,52 @@ function RecipesInProgressFood() {
             />
           </div>
           {
-            Object.keys(food).filter((key) => key.includes('strIngredient'))
-              .map((key, i) => (
-                food[key] && (
-                  <div
-                    key={ key }
-                    data-testid={ `${i}-ingredient-step` }
+
+            ingredients.map((key, i) => (
+              <div
+                key={ key }
+                data-testid={ `${i}-ingredient-step` }
+              >
+                <label
+                  htmlFor={ i }
+                  className={ meals[rota][idRecipe] && meals[rota][idRecipe]
+                    .some((made) => (
+                      made === key))
+                    ? 'checkboxIngredient' : '' }
+                >
+                  <input
+                    type="checkbox"
+                    data-testid={ `${i}-ingredient` }
+                    id={ i }
+                    checked={ meals[rota][idRecipe] && meals[rota][idRecipe]
+                      .some((made) => (
+                        made === key)) }
+                    onChange={
+                      () => saveCheckbox(key)
+                    }
+                  />
+                  <p
+                    className={ meals[rota][idRecipe] && meals[rota][idRecipe]
+                      .some((made) => (
+                        made === key))
+                      ? 'checkboxIngredient' : '' }
                   >
-                    <label
-                      htmlFor={ i }
-                    >
-                      <input
-                        type="checkbox"
-                        id={ i }
-                        checked={ meals[rota][idRecipe]
-                          .some((made) => (
-                            made === `${food[`strMeasure${i + 1}`]} ${food[key]}`)) }
-                        onChange={
-                          () => saveCheckbox(`${food[`strMeasure${i + 1}`]} ${food[key]}`)
-                        }
-                      />
-                      <p
-                        className={ meals[rota][idRecipe]
-                          .some((made) => (
-                            made === `${food[`strMeasure${i + 1}`]} ${food[key]}`))
-                          ? 'checkboxIngredient' : '' }
-                      >
-                        {`${food[`strMeasure${i + 1}`]} ${food[key]}`}
-                      </p>
-                    </label>
-                  </div>
-                )
-              ))
+
+                    {key}
+                  </p>
+
+                </label>
+              </div>
+            ))
           }
           <p data-testid="instructions">{food.strInstructions}</p>
           <button
             type="button"
             data-testid="finish-recipe-btn"
             className="finish-recipe-btn "
-            disabled={ (Object.entries(food)
-              .filter((key) => key[0].includes('strIngredient')
-              && key[1]).length !== meals[rota][idRecipe].length) }
-            onClick={ () => handleFinish() }
+            disabled={ meals[rota][idRecipe]
+              && (ingredients.length !== meals[rota][idRecipe].length) }
+            onClick={ () => history.push('/done-recipes') }
           >
             Finish Recipe
           </button>
