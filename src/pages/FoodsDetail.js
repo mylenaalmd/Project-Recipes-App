@@ -20,6 +20,7 @@ function FoodDetails({ history: { push }, location: { pathname } }) {
   const [isCopied, setIsCopied] = useState(false);
   const [isFav, setIsFav] = useState(false);
 
+  console.log(doingRecipe);
   useEffect(() => {
     const changeIsFav = () => {
       const alreadyFav = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
@@ -113,7 +114,7 @@ function FoodDetails({ history: { push }, location: { pathname } }) {
           }
           <p data-testid="instructions">{food.strInstructions}</p>
           <iframe src={ food.strYoutube } title={ food.strMeal } data-testid="video" />
-          { recipesMade.some((made) => made.idMeal === food.idMeal) === false
+          { recipesMade.some((made) => made === food.idMeal) === false
           && (
             <button
               className="btn-start-recipe"
@@ -121,7 +122,7 @@ function FoodDetails({ history: { push }, location: { pathname } }) {
               type="button"
               onClick={ () => push(`${pathname}/in-progress`) }
             >
-              { doingRecipe.some((doing) => doing.idMeal === food.idMeal)
+              { doingRecipe.some((doing) => doing === food.idMeal)
                 ? 'Continue Recipe' : 'Start Recipe' }
             </button>
           )}

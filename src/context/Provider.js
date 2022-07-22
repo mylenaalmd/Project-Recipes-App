@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Context from './context';
 // import useFetch from '../hooks/useFetch';
@@ -17,14 +17,21 @@ function Provider({ children }) {
   const [dataFood, setDataFood] = useState([]);
   const [dataDrink, setDataDrink] = useState([]);
   const [recipesMade, setRecipesMade] = useState([]);
-  const [foodsMade, setFoodsMade] = useState([{ idMeal: '0000' }, { idMeal: '0000' }]);
   const [doingRecipe, setDoingRecipe] = useState([]);
-  const [doingFood, setDoingFood] = useState([{ idMeal: '0000' }, { idMeal: '0000' }]);
 
   // useFetch(urlFood, setDataFoods, MAX_RECIPES, 'meals');
   // useFetch(urlFoodCategory, setDataFoodsCategory, MAX_CATEGORIES, 'meals');
   // useFetch(urlDrinks, setDataDrinks, MAX_RECIPES, 'drinks');
   // useFetch(urlDrinksCategory, setDataDrinksCategory, MAX_CATEGORIES, 'drinks');
+
+  useEffect(() => {
+    const getDoing = () => {
+      const doing = JSON.parse(localStorage.getItem('inProgressRecipes'));
+      if (doing.meals) setDoingRecipe(Object.keys(doing.meals));
+      if (doing.cocktails) setDoingRecipe(Object.keys(doing.cocktails));
+    };
+    getDoing();
+  }, []);
 
   const context = {
     dataFoods,
@@ -43,10 +50,6 @@ function Provider({ children }) {
     setRecipesMade,
     doingRecipe,
     setDoingRecipe,
-    foodsMade,
-    setFoodsMade,
-    doingFood,
-    setDoingFood,
   };
   return (
     <Context.Provider value={ context }>

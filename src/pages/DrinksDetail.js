@@ -112,7 +112,7 @@ function DrinksDetails({ history: { push }, location: { pathname } }) {
               ))
           }
           <p data-testid="instructions">{drink.strInstructions}</p>
-          { recipesMade.some((made) => made.idDrink === drink.idDrink) === false
+          { recipesMade.some((made) => made === drink.idDrink) === false
           && (
             <button
               className="btn-start-recipe"
@@ -120,7 +120,7 @@ function DrinksDetails({ history: { push }, location: { pathname } }) {
               type="button"
               onClick={ () => push(`${pathname}/in-progress`) }
             >
-              { doingRecipe.some((doing) => doing.idDrink === drink.idDrink)
+              { doingRecipe.some((doing) => doing === drink.idDrink)
                 ? 'Continue Recipe' : 'Start Recipe' }
             </button>
           )}
