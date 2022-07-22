@@ -51,3 +51,13 @@
   position: fixed;
 }
 
+.finish-recipe-btn {
+  bottom: 0;
+  left: 15vh;
+  position: fixed;
+}
+
+.checkboxIngredient {
+  text-decoration: line-through;
+}
+

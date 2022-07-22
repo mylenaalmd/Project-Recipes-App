@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 // import PropTypes from 'prop-types';
 import useFetch from '../hooks/useFetch';
 import context from '../context/context';
@@ -12,8 +12,10 @@ const copy = require('clipboard-copy');
 const THREE_SECONDS = 3000;
 
 function RecipesInProgressDrink() {
+  const { pathname } = useLocation();
+  const rota = pathname.includes('drinks') ? 'cocktails' : 'meals';
   const { idRecipe } = useParams();
-  const [cocktails, setCocktails] = useState({ [idRecipe]: [] });
+  const [cocktails, setCocktails] = useState({ [rota]: { [idRecipe]: [] } });
   const { dataDrink, setDataDrink } = useContext(context);
   const MAX_RECIPES = 1;
   const history = useHistory();
@@ -21,20 +23,17 @@ function RecipesInProgressDrink() {
   useFetch(urlDrink, setDataDrink, MAX_RECIPES, 'drinks');
   const [isCopied, setIsCopied] = useState(false);
   const [isFav, setIsFav] = useState(false);
-  // const meals = food[0];
-  console.log(dataDrink[0]);
+  console.log(cocktails);
 
-  // const saveCheck = (dado) => {
-  //   setCocktails({ [idRecipe]: [...cocktails[idRecipe], dado] });
-  //   localStorage.setItem('inProgressRecipes', JSON.stringify({ ...cocktails }));
-  //   console.log(cocktails);
-  // };
   const saveCheck = (dado) => {
-    console.log(dado);
+    console.log(cocktails);
     setCocktails((prev) => (
       {
         ...prev,
-        [idRecipe]: [cocktails[idRecipe], dado],
+        [rota]: {
+          ...prev[rota],
+          [idRecipe]: [...prev[rota][idRecipe], dado],
+        },
 
       }
     ));
@@ -42,19 +41,31 @@ function RecipesInProgressDrink() {
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    setCocktails(data);
-  }, []);
+    setCocktails(data === null ? { [rota]: { [idRecipe]: [] } } : data);
+  }, [idRecipe, rota]);
 
   useEffect(() => {
-    const dataLocalStorage = () => {
-      localStorage.setItem('inProgressRecipes', JSON.stringify({ cocktails }));
-    };
-    dataLocalStorage();
+    // const dataLocalStorage = () => {
+    localStorage.setItem('inProgressRecipes', JSON.stringify(cocktails));
+    // dataLocalStorage();
   }, [cocktails]);
+
+  useEffect(() => {
+    const changeIsFav = () => {
+      const alreadyFav = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+      if (alreadyFav.length === 0) return setIsFav(false);
+      if (dataDrink.length === 1) {
+        const some = alreadyFav.some((drink) => drink.id === dataDrink[0].idDrink);
+        setIsFav(some);
+      }
+    };
+
+    changeIsFav();
+  }, [dataDrink]);
 
   const showMessagem = () => {
     setIsCopied(true);
-    copy(`http://localhost:3000/drinks/${idRecipe}/in-progress`);
+    copy(`http://localhost:3000/drinks/${idRecipe}`);
     setTimeout(() => {
       setIsCopied(false);
     }, THREE_SECONDS);
@@ -87,9 +98,8 @@ function RecipesInProgressDrink() {
   return (
     <>
       <div>RecipesInProgress</div>
-      { dataDrink.map((drink, index) => (
+      { dataDrink.map((drink) => (
         <div key={ drink.idDrink } className="recipesInProgress">
-          { isCopied && (<p>Link copied!</p>)}
           <h2 data-testid="recipe-title">{drink.strDrink}</h2>
           <h4 data-testid="recipe-category">{drink.strCategory}</h4>
           <button
@@ -99,9 +109,9 @@ function RecipesInProgressDrink() {
           >
             <img src={ shareIcon } alt="share-btn" />
           </button>
+          { isCopied && (<p>Link copied!</p>)}
           <button
             type="button"
-            data-testid="favorite-btn"
             onClick={ () => favoriteRecipe(!isFav) }
           >
             <img
@@ -127,19 +137,28 @@ function RecipesInProgressDrink() {
                     key={ key }
                     data-testid={ `${i}-ingredient-step` }
                   >
-                    <label htmlFor="checkbox">
+                    <label
+                      htmlFor={ i }
+                    >
                       <input
-                        className="checkboxIngredient"
                         type="checkbox"
-                        value="checkbox"
-                        onClick={
+                        id={ i }
+                        checked={ cocktails[rota][idRecipe]
+                          .some((made) => (
+                            made === `${drink[`strMeasure${i + 1}`]} ${drink[key]}`)) }
+                        onChange={
                           () => saveCheck(`${drink[`strMeasure${i + 1}`]} ${drink[key]}`)
                         }
                       />
+                      <p
+                        className={ cocktails[rota][idRecipe]
+                          .some((made) => (
+                            made === `${drink[`strMeasure${i + 1}`]} ${drink[key]}`))
+                          ? 'checkboxIngredient' : '' }
+                      >
+                        {`${drink[`strMeasure${i + 1}`]} ${drink[key]}`}
+                      </p>
                     </label>
-                    <p>
-                      {`${drink[`strMeasure${index + 1}`]} ${drink[key]}`}
-                    </p>
                   </div>
                 )
               ))
@@ -148,6 +167,10 @@ function RecipesInProgressDrink() {
           <button
             type="button"
             data-testid="finish-recipe-btn"
+            className="finish-recipe-btn"
+            disabled={ (Object.entries(drink)
+              .filter((key) => key[0].includes('strIngredient')
+              && key[1]).length !== cocktails[rota][idRecipe].length) }
             onClick={ () => history.push('/done-recipes') }
           >
             Finish Recipe
@@ -157,11 +180,4 @@ function RecipesInProgressDrink() {
     </>
   );
 }
-// RecipesInProgressDrink.propTypes = {
-//   history: PropTypes.objectOf(
-//     PropTypes.func.isRequired,
-//   ).isRequired,
-//   location: PropTypes.shape({
-//     pathname: PropTypes.string.isRequired }).isRequired,
-// };
 export default RecipesInProgressDrink;

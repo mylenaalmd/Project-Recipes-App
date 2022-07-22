@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory, useLocation } from 'react-router-dom';
 // import PropTypes from 'prop-types';
 import useFetch from '../hooks/useFetch';
 import context from '../context/context';
@@ -12,8 +12,10 @@ const copy = require('clipboard-copy');
 const THREE_SECONDS = 3000;
 
 function RecipesInProgressFood() {
+  const { pathname } = useLocation();
+  const rota = pathname.includes('foods') ? 'meals' : 'cocktails';
   const { idRecipe } = useParams();
-  const [meals, setMeals] = useState({ [idRecipe]: [] });
+  const [meals, setMeals] = useState({ [rota]: { [idRecipe]: [] } });
   const { dataFood, setDataFood } = useContext(context);
   const history = useHistory();
   const MAX_RECIPES = 1;
@@ -22,26 +24,24 @@ function RecipesInProgressFood() {
   const [isCopied, setIsCopied] = useState(false);
   const [isFav, setIsFav] = useState(false);
 
-  // const saveCheckbox = (dado) => {
-  //   setMeals({ [idRecipe]: [...meals[idRecipe], dado] });
-  //   localStorage.setItem('inProgressRecipes', JSON.stringify({ meals }));
-  // };
-
   const saveCheckbox = (dado) => {
     setMeals((prev) => (
       {
         ...prev,
-        [idRecipe]: [...prev[idRecipe], dado],
+        [rota]: {
+          ...prev[rota],
+          [idRecipe]: [...prev[rota][idRecipe], dado],
+        },
 
       }
     ));
-    console.log(meals);
+    // console.log(meals);
   };
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    setMeals(data === null ? { [idRecipe]: [] } : data);
-  }, [idRecipe]);
+    setMeals(data === null ? { [rota]: { [idRecipe]: [] } } : data);
+  }, [idRecipe, rota]);
 
   useEffect(() => {
     // const dataLocalStorage = () => {
@@ -50,9 +50,22 @@ function RecipesInProgressFood() {
     // dataLocalStorage();
   }, [meals]);
 
+  useEffect(() => {
+    const changeIsFav = () => {
+      const alreadyFav = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
+      if (alreadyFav.length === 0) return setIsFav(false);
+      if (dataFood.length === 1) {
+        const some = alreadyFav.some((meal) => meal.id === dataFood[0].idMeal);
+        setIsFav(some);
+      }
+    };
+
+    changeIsFav();
+  }, [dataFood]);
+
   const showMessagem = () => {
     setIsCopied(true);
-    copy(`http://localhost:3000/foods/${idRecipe}/in-progress`);
+    copy(`http://localhost:3000/foods/${idRecipe}`);
     setTimeout(() => {
       setIsCopied(false);
     }, THREE_SECONDS);
@@ -87,7 +100,6 @@ function RecipesInProgressFood() {
       <div>RecipesInProgress</div>
       { dataFood.map((food) => (
         <div key={ food.idMeal } className="recipesInProgress">
-          { isCopied && (<p>Link copied!</p>)}
           <h2 data-testid="recipe-title">{food.strMeal}</h2>
           <h4 data-testid="recipe-category">{food.strCategory}</h4>
           <button
@@ -97,9 +109,9 @@ function RecipesInProgressFood() {
           >
             <img src={ shareIcon } alt="share-btn" />
           </button>
+          { isCopied && (<p>Link copied!</p>)}
           <button
             type="button"
-            data-testid="favorite-btn"
             onClick={ () => favoriteRecipe(!isFav) }
           >
             <img
@@ -125,17 +137,28 @@ function RecipesInProgressFood() {
                     key={ key }
                     data-testid={ `${i}-ingredient-step` }
                   >
-                    <label htmlFor="checkbox">
+                    <label
+                      htmlFor={ i }
+                    >
                       <input
-                        className="checkboxIngredient"
                         type="checkbox"
                         id={ i }
-                        onClick={
+                        checked={ meals[rota][idRecipe]
+                          .some((made) => (
+                            made === `${food[`strMeasure${i + 1}`]} ${food[key]}`)) }
+                        onChange={
                           () => saveCheckbox(`${food[`strMeasure${i + 1}`]} ${food[key]}`)
                         }
                       />
+                      <p
+                        className={ meals[rota][idRecipe]
+                          .some((made) => (
+                            made === `${food[`strMeasure${i + 1}`]} ${food[key]}`))
+                          ? 'checkboxIngredient' : '' }
+                      >
+                        {`${food[`strMeasure${i + 1}`]} ${food[key]}`}
+                      </p>
                     </label>
-                    <p>{`${food[`strMeasure${i + 1}`]} ${food[key]}`}</p>
                   </div>
                 )
               ))
@@ -144,6 +167,10 @@ function RecipesInProgressFood() {
           <button
             type="button"
             data-testid="finish-recipe-btn"
+            className="finish-recipe-btn "
+            disabled={ (Object.entries(food)
+              .filter((key) => key[0].includes('strIngredient')
+              && key[1]).length !== meals[rota][idRecipe].length) }
             onClick={ () => history.push('/done-recipes') }
           >
             Finish Recipe
