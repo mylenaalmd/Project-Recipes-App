@@ -16,7 +16,8 @@ function RecipesInProgressFood() {
   const rota = pathname.includes('foods') ? 'meals' : 'cocktails';
   const { idRecipe } = useParams();
   const [meals, setMeals] = useState({ [rota]: { [idRecipe]: [] } });
-  const { dataFood, setDataFood } = useContext(context);
+  const { dataFood, setDataFood, setDoingRecipe, doingRecipe,
+    recipesMade, setRecipesMade } = useContext(context);
   const history = useHistory();
   const MAX_RECIPES = 1;
   const [urlFood] = useState(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idRecipe}`);
@@ -35,6 +36,7 @@ function RecipesInProgressFood() {
 
       }
     ));
+    setDoingRecipe([...doingRecipe, idRecipe]);
     // console.log(meals);
   };
 
@@ -93,6 +95,13 @@ function RecipesInProgressFood() {
       localStorage.setItem('favoriteRecipes', JSON.stringify(filtered));
       setIsFav(false);
     }
+  };
+
+  const handleFinish = () => {
+    history.push('/done-recipes');
+    const filtered = doingRecipe.filter((curr) => curr !== idRecipe);
+    setDoingRecipe(filtered);
+    setRecipesMade([...recipesMade, idRecipe]);
   };
 
   return (
@@ -171,7 +180,7 @@ function RecipesInProgressFood() {
             disabled={ (Object.entries(food)
               .filter((key) => key[0].includes('strIngredient')
               && key[1]).length !== meals[rota][idRecipe].length) }
-            onClick={ () => history.push('/done-recipes') }
+            onClick={ () => handleFinish() }
           >
             Finish Recipe
           </button>

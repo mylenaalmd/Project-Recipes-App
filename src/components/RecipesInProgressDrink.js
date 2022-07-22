@@ -16,17 +16,16 @@ function RecipesInProgressDrink() {
   const rota = pathname.includes('drinks') ? 'cocktails' : 'meals';
   const { idRecipe } = useParams();
   const [cocktails, setCocktails] = useState({ [rota]: { [idRecipe]: [] } });
-  const { dataDrink, setDataDrink } = useContext(context);
+  const { dataDrink, setDataDrink, setDoingRecipe, doingRecipe,
+    recipesMade, setRecipesMade } = useContext(context);
   const MAX_RECIPES = 1;
   const history = useHistory();
   const [urlDrink] = useState(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${idRecipe}`);
   useFetch(urlDrink, setDataDrink, MAX_RECIPES, 'drinks');
   const [isCopied, setIsCopied] = useState(false);
   const [isFav, setIsFav] = useState(false);
-  console.log(cocktails);
 
   const saveCheck = (dado) => {
-    console.log(cocktails);
     setCocktails((prev) => (
       {
         ...prev,
@@ -37,6 +36,7 @@ function RecipesInProgressDrink() {
 
       }
     ));
+    setDoingRecipe([...doingRecipe, idRecipe]);
   };
 
   useEffect(() => {
@@ -93,6 +93,13 @@ function RecipesInProgressDrink() {
       localStorage.setItem('favoriteRecipes', JSON.stringify(filtered));
       setIsFav(false);
     }
+  };
+
+  const handleFinish = () => {
+    history.push('/done-recipes');
+    const filtered = doingRecipe.filter((curr) => curr !== idRecipe);
+    setDoingRecipe(filtered);
+    setRecipesMade([...recipesMade, idRecipe]);
   };
 
   return (
@@ -171,7 +178,7 @@ function RecipesInProgressDrink() {
             disabled={ (Object.entries(drink)
               .filter((key) => key[0].includes('strIngredient')
               && key[1]).length !== cocktails[rota][idRecipe].length) }
-            onClick={ () => history.push('/done-recipes') }
+            onClick={ () => handleFinish() }
           >
             Finish Recipe
           </button>
