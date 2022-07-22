@@ -139,7 +139,7 @@ function FoodDetails({ history: { push }, location: { pathname } }) {
               src={ drink.strDrinkThumb }
               alt={ drink.strDrink }
             />
-            <h1>{drink.strDrink}</h1>
+            <h1 data-testid={ `${index}-recomendation-title` }>{drink.strDrink}</h1>
           </div>
         ))}
       </div>

@@ -1,6 +1,6 @@
 * {
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 
 .header {
@@ -52,31 +52,31 @@ iframe {
 } */
 
 .carouselItems {
-display: flex;
-  white-space: nowrap;
+  display: flex;
   overflow-x: auto;
+  white-space: nowrap;
   width: 360px;
 }
 
 .RecomendationCard {
-  text-align: center;
   margin-left: 10px;
   max-width: 180px;
+  text-align: center;
 }
 
-.RecomendationCard:nth-child(3) {
+.RecomendationCard:nth-child( 3 ) {
   display: none;
 }
 
-.RecomendationCard:nth-child(4) {
+.RecomendationCard:nth-child( 4 ) {
   display: none;
 }
 
-.RecomendationCard:nth-child(5) {
+.RecomendationCard:nth-child( 5 ) {
   display: none;
 }
 
-.RecomendationCard:nth-child(6) {
+.RecomendationCard:nth-child( 6 ) {
   display: none;
 }
 
