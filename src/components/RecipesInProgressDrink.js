@@ -108,7 +108,7 @@ function RecipesInProgressDrink() {
       { dataDrink.map((drink) => (
         <div key={ drink.idDrink } className="recipesInProgress">
           <h2 data-testid="recipe-title">{drink.strDrink}</h2>
-          <h4 data-testid="recipe-category">{drink.strCategory}</h4>
+          <h4 data-testid="recipe-category">{drink.Alcoholic}</h4>
           <button
             type="button"
             data-testid="share-btn"
