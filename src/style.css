@@ -1,5 +1,6 @@
 * {
   padding: 0;
+  margin: 0;
 }
 
 .header {
@@ -20,14 +21,10 @@
   flex-wrap: wrap;
 }
 
-.card {
+/* .card {
   margin-bottom: 10px;
   margin-left: 20px;
-}
-
-img {
-  max-width: 80vh;
-}
+} */
 
 .cards img {
   max-width: 100px;
@@ -37,27 +34,58 @@ img {
   font-size: small;
 }
 
-.detail img {
+.detail {
+  padding: 25px 0;
+  width: 100vm;
+}
+
+iframe {
+  max-width: 250px;
+}
+
+.instructions {
+  width: 100vm;
+}
+
+/* .detail img {
   max-width: 100px;
+} */
+
+.carouselItems {
+display: flex;
+  white-space: nowrap;
+  overflow-x: auto;
+  width: 360px;
 }
 
 .RecomendationCard {
-  max-width: 50%;
+  text-align: center;
+  margin-left: 10px;
+  max-width: 180px;
+}
+
+.RecomendationCard:nth-child(3) {
+  display: none;
+}
+
+.RecomendationCard:nth-child(4) {
+  display: none;
+}
+
+.RecomendationCard:nth-child(5) {
+  display: none;
+}
+
+.RecomendationCard:nth-child(6) {
+  display: none;
+}
+
+.ButtonRecipe {
+  width: 100vm;
 }
 
 .btn-start-recipe {
   bottom: 0;
-  left: 15vh;
   position: fixed;
+  width: 100%;
 }
-
-.finish-recipe-btn {
-  bottom: 0;
-  left: 15vh;
-  position: fixed;
-}
-
-.checkboxIngredient {
-  text-decoration: line-through;
-}
-
