@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/react';
 import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
-import { drinksAPI } from './helpers/drinksAPI';
+import { burek } from './helpers/foodAPI';
 import doneRecipes from './helpers/doneRecipesAPI';
 
 const INGREDIENTS = [
@@ -78,7 +78,7 @@ describe('Testes do componente Recipes in progress', () => {
   const jestMockApi = () => {
     jest.spyOn(global, 'fetch')
       .mockImplementation(() => Promise.resolve({
-        json: () => Promise.resolve(drinksAPI),
+        json: () => Promise.resolve(burek),
       }));
   };
   const LINK_API = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=53060';

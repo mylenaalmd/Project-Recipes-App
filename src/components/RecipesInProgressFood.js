@@ -10,17 +10,14 @@ import whiteHeart from '../images/whiteHeartIcon.svg';
 
 const copy = require('clipboard-copy');
 
-// const THREE_SECONDS = 3000;
-
-// const laland = JSON.parse(localStorage.getItem('inProgressRecipes'));
-
 function RecipesInProgressFood() {
   const { pathname } = useLocation();
   const rota = pathname.includes('foods') && 'meals';
   const { idRecipe } = useParams();
   const INITIAL_STATE = { [rota]: { [idRecipe]: [] } };
   const [meals, setMeals] = useState(INITIAL_STATE);
-  const { dataFood, setDataFood } = useContext(context);
+  const { dataFood, setDataFood, setDoingRecipe, doingRecipe,
+    recipesMade, setRecipesMade } = useContext(context);
   const history = useHistory();
   const urlFood = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idRecipe}`;
   const [isCopied, setIsCopied] = useState(false);
@@ -39,6 +36,7 @@ function RecipesInProgressFood() {
 
       }
     ));
+    setDoingRecipe([...doingRecipe, idRecipe]);
     // console.log(meals);
   };
 
@@ -109,6 +107,13 @@ function RecipesInProgressFood() {
       localStorage.setItem('favoriteRecipes', JSON.stringify(filtered));
       setIsFav(false);
     }
+  };
+
+  const handleFinish = () => {
+    history.push('/done-recipes');
+    const filtered = doingRecipe.filter((curr) => curr !== idRecipe);
+    setDoingRecipe(filtered);
+    setRecipesMade([...recipesMade, idRecipe]);
   };
 
   return (
@@ -191,7 +196,7 @@ function RecipesInProgressFood() {
             className="finish-recipe-btn "
             disabled={ meals[rota][idRecipe]
               && (ingredients.length !== meals[rota][idRecipe].length) }
-            onClick={ () => history.push('/done-recipes') }
+            onClick={ () => handleFinish() }
           >
             Finish Recipe
           </button>
