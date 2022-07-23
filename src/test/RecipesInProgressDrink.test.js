@@ -3,25 +3,22 @@ import userEvent from '@testing-library/user-event';
 import { screen } from '@testing-library/react';
 import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
-import { burek } from './helpers/foodAPI';
+import { chocolateCoffee } from './helpers/drinksAPI';
 import doneRecipes from './helpers/doneRecipesAPI';
 
 const INGREDIENTS = [
-  '1 Packet Filo Pastry',
-  '150g Minced Beef',
-  '150g Onion',
-  '40g Oil',
-  'Dash Salt',
-  'Dash Pepper',
+  '3/4 oz Amaretto',
+  '1/2 oz Dark Creme de Cacao',
+  '8 oz Coffee',
 ];
 
 const RECIPES_IN_PROGRESS = {
-  meals: {
-    53060: [],
+  cocktails: {
+    16082: [],
   },
 };
 
-const INITIAL_PATHNAME = '/foods/53060/in-progress';
+const INITIAL_PATHNAME = '/drinks/16082/in-progress';
 
 const STORAGE_MOCK = [
   { alcoholicOrNot: '',
@@ -78,10 +75,10 @@ describe('Testes do componente Recipes in progress', () => {
   const jestMockApi = () => {
     jest.spyOn(global, 'fetch')
       .mockImplementation(() => Promise.resolve({
-        json: () => Promise.resolve(burek),
+        json: () => Promise.resolve(chocolateCoffee),
       }));
   };
-  const LINK_API = 'https://www.themealdb.com/api/json/v1/1/lookup.php?i=53060';
+  const LINK_API = 'https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=16082';
 
   afterEach(() => {
     jest.clearAllMocks();
@@ -97,7 +94,7 @@ describe('Testes do componente Recipes in progress', () => {
     const { history } = renderWithRouter(<App />);
     history.push(INITIAL_PATHNAME);
 
-    const foodName = await screen.findByText(/burek/i);
+    const foodName = await screen.findByText(/Almond Chocolate Coffee/i);
 
     expect(foodName).toBeInTheDocument();
     expect(global.fetch).toBeCalled();
@@ -108,7 +105,7 @@ describe('Testes do componente Recipes in progress', () => {
     async () => {
       const { history } = renderWithRouter(<App />);
       history.push(INITIAL_PATHNAME);
-      const IMG_URL = 'https://www.themealdb.com/images/media/meals/tkxquw1628771028.jpg';
+      const IMG_URL = 'https://www.thecocktaildb.com/images/media/drink/jls02c1493069441.jpg';
 
       const recipeTitle = await screen.findByTestId('recipe-title');
       const recipeCategory = await screen.findByTestId('recipe-category');
@@ -152,13 +149,13 @@ describe('Testes do componente Recipes in progress', () => {
     const { history } = renderWithRouter(<App />);
     history.push(INITIAL_PATHNAME);
     const favoriteBtn = await screen.findByTestId('favorite-btn');
-    expect(favoriteBtn).toHaveAttribute('src', 'blackHeartIcon.svg');
-
-    userEvent.click(favoriteBtn);
     expect(favoriteBtn).toHaveAttribute('src', 'whiteHeartIcon.svg');
 
     userEvent.click(favoriteBtn);
     expect(favoriteBtn).toHaveAttribute('src', 'blackHeartIcon.svg');
+
+    userEvent.click(favoriteBtn);
+    expect(favoriteBtn).toHaveAttribute('src', 'whiteHeartIcon.svg');
   });
 
   it('Testa se o checkbox funciona', async () => {

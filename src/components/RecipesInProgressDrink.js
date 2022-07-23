@@ -150,6 +150,7 @@ function RecipesInProgressDrink() {
                       <input
                         type="checkbox"
                         id={ i }
+                        data-testid={ `${i}-ingredient` }
                         checked={ cocktails[rota][idRecipe]
                           .some((made) => (
                             made === `${drink[`strMeasure${i + 1}`]} ${drink[key]}`)) }

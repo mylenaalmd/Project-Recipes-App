@@ -5,6 +5,14 @@ import renderWithRouter from './helpers/renderWithRouter';
 import App from '../App';
 import doneRecipes from './helpers/doneRecipesAPI';
 
+const RECIPES_IN_PROGRESS = {
+  meals: {
+    53060: [],
+  },
+  cocktails: {
+    16082: [],
+  },
+};
 const localStorageMock = (() => {
   let store = {};
   return {
@@ -32,6 +40,7 @@ describe('Testes do componente Done Recipes', () => {
   beforeEach(() => {
     const { history } = renderWithRouter(<App />);
     localStorageMock.setItem('doneRecipes', JSON.stringify(doneRecipes));
+    localStorageMock.setItem('inProgressRecipes', JSON.stringify(RECIPES_IN_PROGRESS));
     history.push('/done-recipes');
   });
   it('Testa se o titulo e os botões de filtragem estão na tela ao renderizar',
@@ -70,9 +79,9 @@ describe('Testes do componente Done Recipes', () => {
     () => {
       const foodName = () => screen.queryByText('Spicy Arrabiata Penne');
       const drinkName = () => screen.queryByText('Aquamarine');
-      const btnAll = screen.getByText(/all/i);
-      const btnFood = screen.getByText(/food/i);
-      const btnDrink = screen.getByText(/drinks/i);
+      const btnAll = screen.getByTestId('filter-by-all-btn');
+      const btnFood = screen.getByTestId('filter-by-food-btn');
+      const btnDrink = screen.getByTestId('filter-by-drink-btn');
 
       userEvent.click(btnFood);
       expect(drinkName()).not.toBeInTheDocument();
