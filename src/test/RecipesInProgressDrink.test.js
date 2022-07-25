@@ -185,14 +185,14 @@ describe('Testes do componente Recipes in progress', () => {
     const { location: { pathname } } = history;
     expect(pathname).toBe('/done-recipes');
   });
-  // it('Testa se aplicação funciona com o localstorage vazio', async () => {
-  //   localStorageMock.removeItem('inProgressRecipes');
-  //   const { history } = renderWithRouter(<App />);
-  //   history.push(INITIAL_PATHNAME);
+  it('Testa se aplicação funciona com o localstorage vazio', async () => {
+    localStorage.setItem('inProgressRecipes', []);
+    const { history } = renderWithRouter(<App />);
+    history.push(INITIAL_PATHNAME);
 
-  //   const recipeTitle = await screen.findByTestId('recipe-title');
-  //   expect(recipeTitle).toBeInTheDocument();
-  //   const checkboxName = await screen.findByTestId('0-ingredient');
-  //   expect(checkboxName).not.toBeChecked();
-  // });
+    const recipeTitle = await screen.findByTestId('recipe-title');
+    expect(recipeTitle).toBeInTheDocument();
+    const checkboxName = await screen.findByTestId('0-ingredient');
+    expect(checkboxName).not.toBeChecked();
+  });
 });
