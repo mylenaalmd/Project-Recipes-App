@@ -39,9 +39,9 @@
   width: 100vm;
 }
 
-iframe {
+/* iframe {
   max-width: 250px;
-}
+} */
 
 .instructions {
   width: 100vm;
@@ -53,6 +53,7 @@ iframe {
 
 .carouselItems {
   display: flex;
+  margin-bottom: 50px;
   overflow-x: auto;
   white-space: nowrap;
   width: 360px;

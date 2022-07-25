@@ -6,6 +6,7 @@ import useFetch from '../hooks/useFetch';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeart from '../images/blackHeartIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
+import './RecipeDetails.css';
 
 const copy = require('clipboard-copy');
 
@@ -20,7 +21,6 @@ function FoodDetails({ history: { push }, location: { pathname } }) {
   const [isCopied, setIsCopied] = useState(false);
   const [isFav, setIsFav] = useState(false);
 
-  console.log(doingRecipe);
   useEffect(() => {
     const changeIsFav = () => {
       const alreadyFav = JSON.parse(localStorage.getItem('favoriteRecipes')) || [];
@@ -77,43 +77,103 @@ function FoodDetails({ history: { push }, location: { pathname } }) {
           key={ food.idMeal }
           className="card"
         >
-          { isCopied && (<p>Link copied!</p>)}
           <img
             src={ food.strMealThumb }
             alt={ food.strMeal }
             data-testid="recipe-photo"
+            className="recipe-img"
           />
-          <h1 data-testid="recipe-title">{food.strMeal}</h1>
-          <button
-            type="button"
-            data-testid="share-btn"
-            onClick={ showMessagem }
+          <h1
+            data-testid="recipe-title"
+            className="title-detail"
           >
-            <img src={ shareIcon } alt="share-btn" />
-          </button>
-          <button
-            type="button"
-            onClick={ () => favoriteRecipe(!isFav) }
-          >
-            <img
-              data-testid="favorite-btn"
-              alt="favorite-btn"
-              src={ isFav ? (blackHeart) : (whiteHeart) }
-            />
-          </button>
-          <h2 data-testid="recipe-category">{food.strCategory}</h2>
-          {
-            Object.keys(food).filter((key) => key.includes('strIngredient'))
-              .map((key, index) => (
-                food[key] && (
-                  <div key={ key } data-testid={ `${index}-ingredient-name-and-measure` }>
-                    <p>{`${food[`strMeasure${index + 1}`]} ${food[key]}`}</p>
-                  </div>
-                )
-              ))
-          }
-          <p data-testid="instructions">{food.strInstructions}</p>
-          <iframe src={ food.strYoutube } title={ food.strMeal } data-testid="video" />
+            {food.strMeal}
+
+          </h1>
+          <section className="category-container">
+            <span
+              data-testid="recipe-category"
+              className="recipe-category"
+            >
+              {food.strCategory}
+
+            </span>
+            <div className="link-copied">
+              { isCopied && (<span>Link copied!</span>)}
+            </div>
+            <nav className="btn-container">
+              <button
+                type="button"
+                data-testid="share-btn"
+                onClick={ showMessagem }
+                className="btn-detail"
+              >
+                <img src={ shareIcon } alt="share-btn" />
+              </button>
+              <button
+                type="button"
+                onClick={ () => favoriteRecipe(!isFav) }
+                className="btn-detail"
+              >
+                <img
+                  data-testid="favorite-btn"
+                  alt="favorite-btn"
+                  className="favorite-icon"
+                  src={ isFav ? (blackHeart) : (whiteHeart) }
+                />
+              </button>
+            </nav>
+          </section>
+          <main className="recipe-detail">
+            <ul>
+              {
+                Object.keys(food).filter((key) => key.includes('strIngredient'))
+                  .map((key, index) => (
+                    food[key] && (
+                      <div
+                        key={ key }
+                        data-testid={ `${index}-ingredient-name-and-measure` }
+                      >
+                        <li
+                          className="ingredient-list"
+                        >
+                          {`${food[`strMeasure${index + 1}`]} ${food[key]}`}
+
+                        </li>
+                      </div>
+                    )
+                  ))
+              }
+            </ul>
+            <p
+              className="instructions"
+              data-testid="instructions"
+            >
+              {food.strInstructions}
+
+            </p>
+          </main>
+          <iframe
+            className="video"
+            src={ food.strYoutube }
+            title={ food.strMeal }
+            data-testid="video"
+          />
+          <div className="carouselItems">
+            {dataDrink.length > 0 && dataDrink.map((drink, index) => (
+              <div
+                key={ drink.idDrink }
+                className="RecomendationCard"
+                data-testid={ `${index}-recomendation-card` }
+              >
+                <img
+                  src={ drink.strDrinkThumb }
+                  alt={ drink.strDrink }
+                />
+                <h1 data-testid={ `${index}-recomendation-title` }>{drink.strDrink}</h1>
+              </div>
+            ))}
+          </div>
           { recipesMade.some((made) => made === food.idMeal) === false
           && (
             <button
@@ -128,21 +188,6 @@ function FoodDetails({ history: { push }, location: { pathname } }) {
           )}
         </div>
       ))}
-      <div className="carouselItems">
-        {dataDrink.length > 0 && dataDrink.map((drink, index) => (
-          <div
-            key={ drink.idDrink }
-            className="RecomendationCard"
-            data-testid={ `${index}-recomendation-card` }
-          >
-            <img
-              src={ drink.strDrinkThumb }
-              alt={ drink.strDrink }
-            />
-            <h1 data-testid={ `${index}-recomendation-title` }>{drink.strDrink}</h1>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }
