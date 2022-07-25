@@ -1,0 +1,91 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.recipe-img {
+  max-height: 100px;
+  object-fit: cover;
+  width: 360px;
+}
+
+.title-detail {
+  background-color: rgb(3, 107, 82);
+  color: white;
+  font-weight: 800;
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+.category-container {
+  align-items: flex-start;
+  border-bottom: 2px solid grey;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-block: 10px;
+}
+
+.btn-container {
+  display: flex;
+}
+
+.link-copied {
+  display: flex;
+  justify-content: center;
+  width: 100px;
+}
+
+.favorite-icon {
+  width: 30px;
+}
+
+.link-copied span {
+  font-size: 18px;
+}
+
+.btn-detail {
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.ingredient-list {
+  font-size: 18px;
+  margin-left: 25px;
+}
+
+.recipe-category {
+  margin-left: 15px;
+}
+
+.instructions {
+  font-size: 18px;
+  margin-bottom: 50px;
+  text-align: justify;
+}
+
+.video, .recipe-detail {
+  margin: 15px;
+  width: 330px;
+}
+
+/* botão de finalizar receita */
+.btn-start-recipe {
+  background-color: rgb(47, 193, 140);
+  border: none;
+  bottom: 0;
+  color: white;
+  font-weight: 600;
+  padding-block: 10px;
+  position: fixed;
+  width: 100%;
+}
+
+.btn-start-recipe:disabled {
+  background-color: rgb(3, 107, 82);
+}
+

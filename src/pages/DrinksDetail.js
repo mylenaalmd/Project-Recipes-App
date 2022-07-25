@@ -6,6 +6,7 @@ import useFetch from '../hooks/useFetch';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeart from '../images/blackHeartIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
+import './RecipeDetails.css';
 
 const copy = require('clipboard-copy');
 
@@ -85,54 +86,82 @@ function DrinksDetails({ history: { push }, location: { pathname } }) {
           key={ drink.idDrink }
           className="card"
         >
-          { isCopied && (<p>Link copied!</p>)}
           <img
             src={ drink.strDrinkThumb }
             alt={ drink.strDrink }
             data-testid="recipe-photo"
+            className="recipe-img"
           />
-          <h1 data-testid="recipe-title">{drink.strDrink}</h1>
-          <button
-            type="button"
-            data-testid="share-btn"
-            onClick={ showMessagem }
+          <h1
+            data-testid="recipe-title"
+            className="title-detail"
           >
-            <img src={ shareIcon } alt="share-btn" />
-          </button>
-          <button
-            type="button"
-            onClick={ () => favoriteRecipe(!isFav) }
-          >
-            <img
-              data-testid="favorite-btn"
-              alt="favorite-btn"
-              src={ isFav ? (blackHeart) : (whiteHeart) }
-            />
-          </button>
-          <h2 data-testid="recipe-category">{drink.strAlcoholic}</h2>
-          {
-            Object.keys(drink).filter((key) => key.includes('strIngredient'))
-              .map((key, index) => (
-                drink[key] && (
-                  <div key={ key } data-testid={ `${index}-ingredient-name-and-measure` }>
-                    <p>{`${drink[`strMeasure${index + 1}`]} ${drink[key]}`}</p>
-                  </div>
-                )
-              ))
-          }
-          <p data-testid="instructions">{drink.strInstructions}</p>
-          { recipesMade.some((made) => made === drink.idDrink) === false
-          && (
-            <button
-              className="btn-start-recipe"
-              data-testid="start-recipe-btn"
-              type="button"
-              onClick={ () => push(`${pathname}/in-progress`) }
+            {drink.strDrink}
+
+          </h1>
+          <section className="category-container">
+            <span
+              data-testid="recipe-category"
+              className="recipe-category"
             >
-              { doingRecipe.some((doing) => doing === drink.idDrink)
-                ? 'Continue Recipe' : 'Start Recipe' }
-            </button>
-          )}
+              {drink.strAlcoholic}
+
+            </span>
+            <div className="link-copied">
+              { isCopied && (<span>Link copied!</span>)}
+            </div>
+            <nav className="btn-container">
+              <button
+                type="button"
+                data-testid="share-btn"
+                onClick={ showMessagem }
+                className="btn-detail"
+              >
+                <img src={ shareIcon } alt="share-btn" />
+              </button>
+              <button
+                type="button"
+                onClick={ () => favoriteRecipe(!isFav) }
+                className="btn-detail"
+              >
+                <img
+                  data-testid="favorite-btn"
+                  alt="favorite-btn"
+                  className="favorite-icon"
+                  src={ isFav ? (blackHeart) : (whiteHeart) }
+                />
+              </button>
+            </nav>
+          </section>
+          <main className="recipe-in-progress">
+            <ul>
+              {
+                Object.keys(drink).filter((key) => key.includes('strIngredient'))
+                  .map((key, index) => (
+                    drink[key] && (
+                      <div
+                        key={ key }
+                        data-testid={ `${index}-ingredient-name-and-measure` }
+                      >
+                        <li
+                          className="ingredient-list"
+                        >
+                          {`${drink[`strMeasure${index + 1}`]} ${drink[key]}`}
+
+                        </li>
+                      </div>
+                    )
+                  ))
+              }
+            </ul>
+            <p
+              className="instructions"
+              data-testid="instructions"
+            >
+              {drink.strInstructions}
+
+            </p>
+          </main>
         </div>
       ))}
       <div className="carouselItems">
@@ -146,10 +175,27 @@ function DrinksDetails({ history: { push }, location: { pathname } }) {
               src={ food.strMealThumb }
               alt={ food.strMeal }
             />
-            <h1 data-testid={ `${index}-recomendation-title` }>{food.strMeal}</h1>
+            <h1
+              data-testid={ `${index}-recomendation-title` }
+            >
+              {food.strMeal}
+
+            </h1>
           </div>
         ))}
       </div>
+      { recipesMade.some((made) => made === drink.idDrink) === false
+        && (
+          <button
+            className="btn-start-recipe"
+            data-testid="start-recipe-btn"
+            type="button"
+            onClick={ () => push(`${pathname}/in-progress`) }
+          >
+            { doingRecipe.some((doing) => doing === drink.idDrink)
+              ? 'Continue Recipe' : 'Start Recipe' }
+          </button>
+        )}
     </div>
   );
 }
