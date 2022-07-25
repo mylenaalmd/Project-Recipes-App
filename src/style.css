@@ -109,24 +109,20 @@
 }
 
 .detail {
-  padding: 25px 0;
-  width: 100vm;
+  width: 150px;
 }
 
-iframe {
+/* iframe {
   max-width: 250px;
-}
+} */
 
 .instructions {
   width: 100vm;
 }
 
-/* .detail img {
-  max-width: 100px;
-} */
-
 .carouselItems {
   display: flex;
+  margin-bottom: 50px;
   overflow-x: auto;
   white-space: nowrap;
   width: 360px;

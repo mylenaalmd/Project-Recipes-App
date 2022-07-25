@@ -47,6 +47,7 @@ describe('Testes do componente FoodDetails', () => {
         json: () => Promise.resolve(burek),
       }));
 
+    localStorage.setItem('inProgressRecipes', JSON.stringify([]));
     localStorage.setItem('favoriteRecipes', JSON.stringify(initialStorage));
     const { history } = renderWithRouter(<App />);
     history.push('/foods/53060');
