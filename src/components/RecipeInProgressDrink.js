@@ -1,54 +1,80 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams, useHistory, useLocation } from 'react-router-dom';
-// import PropTypes from 'prop-types';
-import useFetch from '../hooks/useFetch';
+import useFetchIngredients from '../hooks/useFetchIngredients';
 import context from '../context/context';
 import shareIcon from '../images/shareIcon.svg';
 import blackHeart from '../images/blackHeartIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
+import IngredientsList from './IngredientsList';
 
 const copy = require('clipboard-copy');
 
-// const THREE_SECONDS = 3000;
-
 function RecipeInProgressDrink() {
   const { pathname } = useLocation();
-  const rota = pathname.includes('drinks') ? 'cocktails' : 'meals';
+  const rota = pathname.includes('drinks') && 'cocktails';
   const { idRecipe } = useParams();
-  const [cocktails, setCocktails] = useState({ [rota]: { [idRecipe]: [] } });
+
+  const data = localStorage.getItem('inProgressRecipes');
+  let INITIAL_STATE = { [rota]: { [idRecipe]: [] }, meals: {} };
+  if (data) {
+    const object = JSON.parse(data);
+    if (Object.keys(object[rota]).some((item) => item === idRecipe)) {
+      INITIAL_STATE = { [rota]: { [idRecipe]: object[rota][idRecipe] }, meals: {} };
+    }
+  }
+  const [cocktails, setCocktails] = useState(INITIAL_STATE);
+
   const { dataDrink, setDataDrink, setDoingRecipe, doingRecipe,
     recipesMade, setRecipesMade } = useContext(context);
-  const MAX_RECIPES = 1;
   const history = useHistory();
-  const [urlDrink] = useState(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${idRecipe}`);
-  useFetch(urlDrink, setDataDrink, MAX_RECIPES, 'drinks');
+  const urlDrink = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${idRecipe}`;
   const [isCopied, setIsCopied] = useState(false);
   const [isFav, setIsFav] = useState(false);
+  const [ingredients, setIngredients] = useState([]);
+  useFetchIngredients(urlDrink, setDataDrink, setIngredients, 'drinks');
 
-  const saveCheck = (dado) => {
-    setCocktails((prev) => (
-      {
-        ...prev,
-        [rota]: {
-          ...prev[rota],
-          [idRecipe]: [...prev[rota][idRecipe], dado],
-        },
+  const saveCheckbox = (dado) => {
+    if (cocktails[rota][idRecipe].some((el) => el === dado)) {
+      setCocktails((prev) => (
+        {
+          ...prev,
+          [rota]: {
+            ...prev[rota],
+            [idRecipe]: prev[rota][idRecipe].filter((item) => item !== dado),
+          },
+        }
+      ));
+    } else {
+      setCocktails((prev) => (
+        {
+          ...prev,
+          [rota]: {
+            ...prev[rota],
+            [idRecipe]: [...prev[rota][idRecipe], dado],
+          },
 
-      }
-    ));
+        }
+      ));
+    }
     setDoingRecipe([...doingRecipe, idRecipe]);
   };
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    setCocktails(data === null ? { [rota]: { [idRecipe]: [] } } : data);
-  }, [idRecipe, rota]);
-
-  useEffect(() => {
-    // const dataLocalStorage = () => {
-    localStorage.setItem('inProgressRecipes', JSON.stringify(cocktails));
-    // dataLocalStorage();
-  }, [cocktails]);
+    const local = localStorage.getItem('inProgressRecipes');
+    if (local) {
+      let object = JSON.parse(local);
+      object = {
+        ...object,
+        cocktails: {
+          ...object?.meals,
+          ...cocktails[rota],
+        },
+      };
+      localStorage.setItem('inProgressRecipes', JSON.stringify(object));
+    } else {
+      localStorage.setItem('inProgressRecipes', JSON.stringify(cocktails));
+    }
+  }, [cocktails, rota]);
 
   useEffect(() => {
     const changeIsFav = () => {
@@ -59,16 +85,12 @@ function RecipeInProgressDrink() {
         setIsFav(some);
       }
     };
-
     changeIsFav();
   }, [dataDrink]);
 
   const showMessagem = () => {
     setIsCopied(true);
     copy(`http://localhost:3000/drinks/${idRecipe}`);
-    // setTimeout(() => {
-    //   setIsCopied(false);
-    // }, THREE_SECONDS);
   };
 
   const favoriteRecipe = (change) => {
@@ -136,49 +158,19 @@ function RecipeInProgressDrink() {
               data-testid="recipe-photo"
             />
           </div>
-          {
-            Object.keys(drink).filter((key) => key.includes('strIngredient'))
-              .map((key, i) => (
-                drink[key] && (
-                  <div
-                    key={ key }
-                    data-testid={ `${i}-ingredient-step` }
-                  >
-                    <label
-                      htmlFor={ i }
-                    >
-                      <input
-                        type="checkbox"
-                        id={ i }
-                        data-testid={ `${i}-ingredient` }
-                        checked={ cocktails[rota][idRecipe]
-                          .some((made) => (
-                            made === `${drink[`strMeasure${i + 1}`]} ${drink[key]}`)) }
-                        onChange={
-                          () => saveCheck(`${drink[`strMeasure${i + 1}`]} ${drink[key]}`)
-                        }
-                      />
-                      <p
-                        className={ cocktails[rota][idRecipe]
-                          .some((made) => (
-                            made === `${drink[`strMeasure${i + 1}`]} ${drink[key]}`))
-                          ? 'checkboxIngredient' : '' }
-                      >
-                        {`${drink[`strMeasure${i + 1}`]} ${drink[key]}`}
-                      </p>
-                    </label>
-                  </div>
-                )
-              ))
-          }
+          <IngredientsList
+            currentRecipe={ cocktails[rota][idRecipe] }
+            ingredients={ ingredients }
+            saveCheckbox={ saveCheckbox }
+
+          />
           <p data-testid="instructions">{drink.strInstructions}</p>
           <button
             type="button"
             data-testid="finish-recipe-btn"
             className="finish-recipe-btn"
-            disabled={ (Object.entries(drink)
-              .filter((key) => key[0].includes('strIngredient')
-              && key[1]).length !== cocktails[rota][idRecipe].length) }
+            disabled={ cocktails[rota][idRecipe]
+              && (ingredients.length !== cocktails[rota][idRecipe].length) }
             onClick={ () => handleFinish() }
           >
             Finish Recipe
