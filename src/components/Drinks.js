@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import context from '../context/context';
 import useFetch from '../hooks/useFetch';
 
+const NUMBER = 1;
+
 const initialUrlDrinks = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
 const urlDrinksCategory = 'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list';
 const MAX_CATEGORIES = 5;
@@ -35,16 +37,19 @@ function Drinks() {
             <button
               type="button"
               key="All"
+              className="strCategory-category-filter1"
               data-testid="All-category-filter"
               onClick={ () => toggleClick('') }
             >
               All
             </button>
             {dataDrinksCategory
-              .map(({ strCategory }) => (
+              .map(({ strCategory }, index) => (
                 <button
                   type="button"
                   key={ strCategory }
+                  className={ index <= NUMBER
+                    ? 'strCategory-category-filter1' : 'strCategory-category-filter2' }
                   data-testid={ `${strCategory}-category-filter` }
                   onClick={ () => toggleClick(strCategory) }
                 >

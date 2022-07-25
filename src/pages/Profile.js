@@ -21,28 +21,33 @@ function Profile({ history: { push } }) {
   };
 
   return (
-    <section>
+    <section className="profile">
       <Header title="Profile" isSearch={ false } />
       <p data-testid="profile-email">{email}</p>
-      <Link
-        data-testid="profile-done-btn"
-        to="/done-recipes"
-      >
-        Done Recipes
-      </Link>
-      <Link
-        data-testid="profile-favorite-btn"
-        to="/favorite-recipes"
-      >
-        Favorite Recipes
-      </Link>
-      <button
-        type="button"
-        onClick={ () => handleLogout() }
-        data-testid="profile-logout-btn"
-      >
-        Logout
-      </button>
+      <div className="divProfile">
+        <Link
+          data-testid="profile-done-btn"
+          to="/done-recipes"
+          className="profile-done-btn"
+        >
+          Done Recipes
+        </Link>
+        <Link
+          data-testid="profile-favorite-btn"
+          to="/favorite-recipes"
+          className="profile-favorite-btn"
+        >
+          Favorite Recipes
+        </Link>
+        <button
+          type="button"
+          className="profile-logout-btn"
+          onClick={ () => handleLogout() }
+          data-testid="profile-logout-btn"
+        >
+          Logout
+        </button>
+      </div>
       <Footer />
     </section>
   );
