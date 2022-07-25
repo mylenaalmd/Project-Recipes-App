@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import './Login.css';
 
 const minLength = 6;
 function Login() {
@@ -14,29 +15,31 @@ function Login() {
     history.push('foods');
   };
   return (
-    <form onSubmit={ handleClick }>
-      <input
-        data-testid="email-input"
-        type="email"
-        value={ email }
-        onChange={ (e) => setEmail(e.target.value) }
-        placeholder="Digite seu email"
-      />
-      <input
-        data-testid="password-input"
-        type="password"
-        value={ password }
-        onChange={ (e) => setPassword(e.target.value) }
-        placeholder="Digite sua senha"
-      />
-      <button
-        type="submit"
-        data-testid="login-submit-btn"
-        disabled={ !(email.match(/\S+@\S+\.\S+/) && password.length > minLength) }
-      >
-        Enter
-      </button>
-    </form>
+    <main className="Login">
+      <form onSubmit={ handleClick }>
+        <input
+          data-testid="email-input"
+          type="email"
+          value={ email }
+          onChange={ (e) => setEmail(e.target.value) }
+          placeholder="Digite seu email"
+        />
+        <input
+          data-testid="password-input"
+          type="password"
+          value={ password }
+          onChange={ (e) => setPassword(e.target.value) }
+          placeholder="Digite sua senha"
+        />
+        <button
+          type="submit"
+          data-testid="login-submit-btn"
+          disabled={ !(email.match(/\S+@\S+\.\S+/) && password.length > minLength) }
+        >
+          Enter
+        </button>
+      </form>
+    </main>
   );
 }
 
