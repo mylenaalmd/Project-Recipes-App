@@ -6,6 +6,7 @@ import shareIcon from '../images/shareIcon.svg';
 import blackHeart from '../images/blackHeartIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
 import IngredientsList from './IngredientsList';
+import './RecipeInProgress.css';
 
 const copy = require('clipboard-copy');
 
@@ -125,50 +126,72 @@ function RecipeInProgressDrink() {
   };
 
   return (
-    <>
-      <div>RecipesInProgress</div>
+    <div>
+      {/* <div>RecipesInProgress</div> */}
       { dataDrink.map((drink) => (
         <div key={ drink.idDrink } className="recipesInProgress">
-          <h2 data-testid="recipe-title">{drink.strDrink}</h2>
-          <h4 data-testid="recipe-category">{drink.Alcoholic}</h4>
-          <button
-            type="button"
-            data-testid="share-btn"
-            onClick={ showMessagem }
-          >
-            <img src={ shareIcon } alt="share-btn" />
-          </button>
-          { isCopied && (<p>Link copied!</p>)}
-          <button
-            type="button"
-            onClick={ () => favoriteRecipe(!isFav) }
-          >
-            <img
-              data-testid="favorite-btn"
-              alt="favorite-btn"
-              src={ isFav ? (blackHeart) : (whiteHeart) }
-            />
-          </button>
-          <div
-            className="card"
-          >
-            <img
-              src={ drink.strDrinkThumb }
-              alt={ drink.strDrink }
-              data-testid="recipe-photo"
-            />
-          </div>
-          <IngredientsList
-            currentRecipe={ cocktails[rota][idRecipe] }
-            ingredients={ ingredients }
-            saveCheckbox={ saveCheckbox }
-
+          <img
+            src={ drink.strDrinkThumb }
+            alt={ drink.strDrink }
+            data-testid="recipe-photo"
+            className="recipe-img"
           />
-          <p data-testid="instructions">{drink.strInstructions}</p>
+          <h2 className="title-progress" data-testid="recipe-title">{drink.strDrink}</h2>
+          <section className="category-container">
+            <span
+              data-testid="recipe-category"
+              className="recipe-category"
+            >
+              {drink.Alcoholic}
+
+            </span>
+            <div className="link-copied">
+              { isCopied && (<span>Link copied!</span>)}
+            </div>
+            <nav className="btn-container">
+
+              <button
+                type="button"
+                data-testid="share-btn"
+                className="btn-progress"
+                onClick={ showMessagem }
+              >
+                <img src={ shareIcon } alt="share-btn" />
+              </button>
+              <button
+                type="button"
+                onClick={ () => favoriteRecipe(!isFav) }
+                className="btn-progress"
+              >
+                <img
+                  data-testid="favorite-btn"
+                  alt="favorite-btn"
+                  className="favorite-icon"
+                  src={ isFav ? (blackHeart) : (whiteHeart) }
+                />
+              </button>
+            </nav>
+          </section>
+          <main className="recipe-in-progress">
+
+            <h4>Ingredients</h4>
+            <IngredientsList
+              currentRecipe={ cocktails[rota][idRecipe] }
+              ingredients={ ingredients }
+              saveCheckbox={ saveCheckbox }
+            />
+            <p
+              className="instructions"
+              data-testid="instructions"
+            >
+              {drink.strInstructions}
+
+            </p>
+          </main>
           <button
             type="button"
             data-testid="finish-recipe-btn"
-            className="finish-recipe-btn"
+            className="btn-finish-recipe"
             disabled={ cocktails[rota][idRecipe]
               && (ingredients.length !== cocktails[rota][idRecipe].length) }
             onClick={ () => handleFinish() }
@@ -177,7 +200,8 @@ function RecipeInProgressDrink() {
           </button>
         </div>
       ))}
-    </>
+    </div>
   );
 }
+
 export default RecipeInProgressDrink;

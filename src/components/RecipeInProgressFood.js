@@ -6,7 +6,7 @@ import blackHeart from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
 import IngredientsList from './IngredientsList';
-import './RecipeInProgressFood.css';
+import './RecipeInProgress.css';
 
 const copy = require('clipboard-copy');
 
