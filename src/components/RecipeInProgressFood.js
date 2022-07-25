@@ -1,7 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { useParams, useHistory, useLocation } from 'react-router-dom';
-// import PropTypes from 'prop-types';
-// import useFetch from '../hooks/useFetch';
 import useFetchIngredients from '../hooks/useFetchIngredients';
 import context from '../context/context';
 import blackHeart from '../images/blackHeartIcon.svg';
@@ -11,15 +9,19 @@ import IngredientsList from './IngredientsList';
 
 const copy = require('clipboard-copy');
 
-// const THREE_SECONDS = 3000;
-
 function RecipeInProgressFood() {
   const { pathname } = useLocation();
   const rota = pathname.includes('foods') && 'meals';
   const { idRecipe } = useParams();
 
-  // const data = localStorage.getItem('inProgressRecipes');
-  const INITIAL_STATE = { [rota]: { [idRecipe]: [] }, cocktails: {} };
+  const data = localStorage.getItem('inProgressRecipes');
+  let INITIAL_STATE = { [rota]: { [idRecipe]: [] }, cocktails: {} };
+  if (data) {
+    const object = JSON.parse(data);
+    if (Object.keys(object[rota]).some((item) => item === idRecipe)) {
+      INITIAL_STATE = { [rota]: { [idRecipe]: object[rota][idRecipe] }, cocktails: {} };
+    }
+  }
   const [meals, setMeals] = useState(INITIAL_STATE);
 
   const { dataFood, setDataFood, setDoingRecipe, doingRecipe,
@@ -55,46 +57,24 @@ function RecipeInProgressFood() {
       ));
     }
     setDoingRecipe([...doingRecipe, idRecipe]);
-    // console.log(meals);
   };
 
-  // inicio bloco de codigo atual
-  // useEffect(() => {
-  //   // const dataLocalStorage = () => {
-  //   const local = localStorage.getItem('inProgressRecipes');
-  //   if (local) {
-  //     let object = JSON.parse(local);
-  //     object = {
-  //       ...object,
-  //       meals: {
-  //         ...object?.meals,
-  //         ...meals[rota],
-  //       },
-  //     };
-  //     localStorage.setItem('inProgressRecipes', JSON.stringify(object));
-  //     // console.log(object);
-  //   } else {
-  //     localStorage.setItem('inProgressRecipes', JSON.stringify(meals));
-  //   }
-  //   // };
-  //   // dataLocalStorage();
-  // }, [meals, rota]);
-
-  // final bloco de codigo atual
-
-  // inicio bloco de codigo antigo
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem('inProgressRecipes'));
-    setMeals(data === null ? { [rota]: { [idRecipe]: [] } } : data);
-  }, [idRecipe, rota]);
-
-  useEffect(() => {
-    // const dataLocalStorage = () => {
-    localStorage.setItem('inProgressRecipes', JSON.stringify(meals));
-    // dataLocalStorage();
-  }, [meals]);
-
-  // final bloco de codigo antigo
+    const local = localStorage.getItem('inProgressRecipes');
+    if (local) {
+      let object = JSON.parse(local);
+      object = {
+        ...object,
+        meals: {
+          ...object?.meals,
+          ...meals[rota],
+        },
+      };
+      localStorage.setItem('inProgressRecipes', JSON.stringify(object));
+    } else {
+      localStorage.setItem('inProgressRecipes', JSON.stringify(meals));
+    }
+  }, [meals, rota]);
 
   useEffect(() => {
     const changeIsFav = () => {
@@ -111,9 +91,6 @@ function RecipeInProgressFood() {
   const showMessagem = () => {
     setIsCopied(true);
     copy(`http://localhost:3000/foods/${idRecipe}`);
-    // setTimeout(() => {
-    //   setIsCopied(false);
-    // }, THREE_SECONDS);
   };
 
   const favoriteRecipe = (change) => {
@@ -181,38 +158,6 @@ function RecipeInProgressFood() {
               data-testid="recipe-photo"
             />
           </div>
-          {/* {
-
-            ingredients.map((key, i) => (
-              <div
-                key={ key }
-                data-testid={ `${i}-ingredient-step` }
-              >
-                <label
-                  htmlFor={ i }
-                >
-                  <input
-                    type="checkbox"
-                    data-testid={ `${i}-ingredient` }
-                    id={ i }
-                    checked={ meals[rota][idRecipe] && meals[rota][idRecipe]
-                      .some((made) => made === key) }
-                    onChange={
-                      () => saveCheckbox(key)
-                    }
-                  />
-                  <p
-                    className={ meals[rota][idRecipe] && meals[rota][idRecipe]
-                      .some((made) => (made === key)) ? 'checkboxIngredient' : '' }
-                  >
-
-                    {key}
-                  </p>
-
-                </label>
-              </div>
-            ))
-          } */}
           <IngredientsList
             currentRecipe={ meals[rota][idRecipe] }
             ingredients={ ingredients }
