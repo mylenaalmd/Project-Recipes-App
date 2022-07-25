@@ -16,10 +16,19 @@ const urlFoods = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
 
 function DrinksDetails({ history: { push }, location: { pathname } }) {
   const { dataDrink, setDataDrink, dataFoods,
-    recipesMade, doingRecipe, setDataFoods } = useContext(context);
+    recipesMade, doingRecipe, setDataFoods, setDoingRecipe } = useContext(context);
   const { idRecipe } = useParams();
   const [isCopied, setIsCopied] = useState(false);
   const [isFav, setIsFav] = useState(false);
+
+  useEffect(() => {
+    const getDoing = () => {
+      const doing = JSON.parse(localStorage.getItem('inProgressRecipes'));
+      if (doing?.meals) setDoingRecipe(Object.keys(doing.meals));
+      if (doing?.cocktails) setDoingRecipe(Object.keys(doing.cocktails));
+    };
+    getDoing();
+  }, [setDoingRecipe]);
 
   useEffect(() => {
     const changeIsFav = () => {

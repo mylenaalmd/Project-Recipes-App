@@ -24,16 +24,18 @@ const localStorageMock = (() => {
   };
 })();
 
-const EMAIL = 'um@email.com';
+const email = 'um@email.com';
 
 Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
 });
 
+export default localStorageMock;
+
 describe('Testes da página Profile', () => {
   it('Testa o redirecionamento para DoneRecipes', () => {
     localStorageMock.setItem('doneRecipes', '[]');
-    localStorage.setItem('user', JSON.stringify({ email: EMAIL }));
+    localStorage.setItem('user', JSON.stringify({ email }));
     const { history } = renderWithRouter(<App />);
     history.push('/profile');
 
@@ -47,7 +49,8 @@ describe('Testes da página Profile', () => {
 
   it('Testa o redirecionamento para Favorites', () => {
     const { history } = renderWithRouter(<App />);
-    localStorage.setItem('user', JSON.stringify({ email: EMAIL }));
+    localStorageMock.setItem('favoriteRecipes', '[]');
+    localStorage.setItem('user', JSON.stringify({ email }));
     history.push('/profile');
 
     const linkFavorite = screen.getByTestId('profile-favorite-btn');
@@ -60,7 +63,7 @@ describe('Testes da página Profile', () => {
 
   it('Testa o funcionamento do botão logout', () => {
     const { history } = renderWithRouter(<App />);
-    localStorage.setItem('user', JSON.stringify({ email: EMAIL }));
+    localStorage.setItem('user', JSON.stringify({ email }));
     history.push('/profile');
 
     const logoutBtn = screen.getByTestId('profile-logout-btn');

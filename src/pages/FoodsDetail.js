@@ -16,10 +16,19 @@ const urlDrink = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s=';
 
 function FoodDetails({ history: { push }, location: { pathname } }) {
   const { dataFood, setDataFood, dataDrink,
-    recipesMade, doingRecipe, setDataDrink } = useContext(context);
+    recipesMade, doingRecipe, setDataDrink, setDoingRecipe } = useContext(context);
   const { idRecipe } = useParams();
   const [isCopied, setIsCopied] = useState(false);
   const [isFav, setIsFav] = useState(false);
+
+  useEffect(() => {
+    const getDoing = () => {
+      const doing = JSON.parse(localStorage.getItem('inProgressRecipes'));
+      if (doing?.meals) setDoingRecipe(Object.keys(doing.meals));
+      if (doing?.cocktails) setDoingRecipe(Object.keys(doing.cocktails));
+    };
+    getDoing();
+  }, [setDoingRecipe]);
 
   useEffect(() => {
     const changeIsFav = () => {

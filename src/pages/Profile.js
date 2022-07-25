@@ -5,12 +5,15 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 
 function Profile({ history: { push } }) {
-  const [email, setEmail] = useState('email@email.com');
+  const [user, setUser] = useState('email@email.com');
 
   useEffect(() => {
     const getEmail = async () => {
-      const localemail = await JSON.parse(localStorage.getItem('user'));
-      if (localemail) setEmail(localemail.email);
+      const localemail = await localStorage.getItem('user');
+      if (localemail) {
+        const object = JSON.parse(localemail);
+        setUser(object.email);
+      }
     };
     getEmail();
   }, []);
@@ -23,7 +26,7 @@ function Profile({ history: { push } }) {
   return (
     <section>
       <Header title="Profile" isSearch={ false } />
-      <p data-testid="profile-email">{email}</p>
+      <p data-testid="profile-email">{user}</p>
       <Link
         data-testid="profile-done-btn"
         to="/done-recipes"
@@ -49,9 +52,8 @@ function Profile({ history: { push } }) {
 }
 
 Profile.propTypes = {
-  history: PropTypes.objectOf(
-    PropTypes.func.isRequired,
-  ).isRequired,
-};
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired }),
+}.isRequired;
 
 export default Profile;
