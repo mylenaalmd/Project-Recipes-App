@@ -205,7 +205,7 @@ describe('Testes do componente Recipes in progress', () => {
   });
 
   it('Testa se aplicação funciona com o localstorage vazio', async () => {
-    localStorageMock.removeItem('inProgressRecipes');
+    localStorageMock.setItem('inProgressRecipes', []);
     const { history } = renderWithRouter(<App />);
     history.push(INITIAL_PATHNAME);
 

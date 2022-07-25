@@ -47,6 +47,7 @@ describe('Testes do componente DrinkDetails', () => {
         json: () => Promise.resolve(abcDrink),
       }));
 
+    localStorage.setItem('inProgressRecipes', JSON.stringify([]));
     localStorage.setItem('favoriteRecipes', JSON.stringify(initialStorage));
     const { history } = renderWithRouter(<App />);
     history.push('/drinks/13501');

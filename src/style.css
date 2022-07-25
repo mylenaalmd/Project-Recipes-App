@@ -35,8 +35,7 @@
 }
 
 .detail {
-  padding: 25px 0;
-  width: 100vm;
+  width: 150px;
 }
 
 iframe {
@@ -46,10 +45,6 @@ iframe {
 .instructions {
   width: 100vm;
 }
-
-/* .detail img {
-  max-width: 100px;
-} */
 
 .carouselItems {
   display: flex;
