@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import context from '../context/context';
 import useFetch from '../hooks/useFetch';
 
+const NUMBER = 1;
+
 const initialUrlFood = 'https://www.themealdb.com/api/json/v1/1/search.php?s=';
 const urlFoodCategory = 'https://www.themealdb.com/api/json/v1/1/list.php?c=list';
 const MAX_CATEGORIES = 5;
@@ -31,20 +33,25 @@ function Foods() {
     <div>
       {(dataFoods.length && dataFoodsCategory.length) > 0 && (
         <div>
-          <div className="categories">
+          <div
+            className="categories"
+          >
             <button
               type="button"
               key="All"
+              className="strCategory-category-filter1"
               data-testid="All-category-filter"
               onClick={ () => toggleFilter('') }
             >
               All
             </button>
             {dataFoodsCategory
-              .map(({ strCategory }) => (
+              .map(({ strCategory }, index) => (
                 <button
                   type="button"
                   key={ strCategory }
+                  className={ index <= NUMBER
+                    ? 'strCategory-category-filter1' : 'strCategory-category-filter2' }
                   data-testid={ `${strCategory}-category-filter` }
                   onClick={ () => toggleFilter(strCategory) }
                 >

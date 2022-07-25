@@ -1,37 +1,111 @@
 * {
+  background-color: #e3de8f;
   margin: 0;
   padding: 0;
 }
 
 .header {
+  align-items: center;
+  background-color: #d9d375;
   display: flex;
+  justify-content: space-around;
+}
+
+.header h1 {
+  background-color: #d9d375;
+  font-family: cursive;
+}
+
+.header img {
+  background-color: #d9d375;
+}
+
+.profile-done-btn {
+  background-color: #d5b942;
+  border: 2px solid #d5b942;
+  border-radius: 12%;
+  color: black;
+  display: flex;
+  margin: 10px;
+  padding: 18px;
+}
+
+.profile-favorite-btn {
+  background-color: #d5b942;
+  border: 2px solid #d5b942;
+  border-radius: 12%;
+  color: black;
+  display: flex;
+  margin: 10px;
+  padding: 18px;
+}
+
+.profile-logout-btn {
+  background-color: #d5b942;
+  border: 2px solid #d5b942;
+  border-radius: 12%;
+  color: black;
+  display: flex;
+  margin: 10px;
+  padding: 18px;
+}
+
+.divProfile {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile p {
+  display: flex;
+  font-size: 30px;
+  justify-content: center;
+  margin: 20px;
+  padding-top: 60px;
 }
 
 .footer {
   align-self: flex-end;
-  background-color: gray;
+  background-color: #d9d375;
+  border: 8px solid #d9d375;
   bottom: 0;
   display: flex;
+  justify-content: space-between;
   position: fixed;
   width: 100%;
 }
 
-.cards {
-  display: flex;
-  flex-wrap: wrap;
+.footer img {
+  background-color: #d9d375;
 }
 
-/* .card {
-  margin-bottom: 10px;
-  margin-left: 20px;
-} */
+.cards {
+  border-radius: 58%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin: 4px;
+  margin-bottom: 50px;
+}
+
+.card {
+  align-items: flex-start;
+  border-radius: 58%;
+  display: flex;
+  margin-inline: 4px;
+  margin-top: 12px;
+}
 
 .cards img {
   max-width: 100px;
 }
 
 .cards h1 {
+  background-color: white;
+  color: black;
   font-size: small;
+  font-weight: 700;
+  margin: 12px;
 }
 
 .detail {
@@ -94,4 +168,33 @@
   bottom: 0;
   position: fixed;
   width: 100%;
+}
+
+.search-top-btn {
+  border-width: 0;
+}
+
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin: 3px;
+}
+
+.strCategory-category-filter1 {
+  background-color: #d5b942;
+  border-radius: 50%;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 5px;
+  padding-inline: 21px;
+}
+
+.strCategory-category-filter2 {
+  background-color: #d5b942;
+  border-radius: 50%;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 5px;
+  padding-inline: 18px;
 }

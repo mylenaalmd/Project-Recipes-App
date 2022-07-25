@@ -23,7 +23,11 @@ function Header({ title, isSearch }) {
       {
         isSearch
         && (
-          <button type="button" onClick={ () => changeSearch() }>
+          <button
+            className="search-top-btn"
+            type="button"
+            onClick={ () => changeSearch() }
+          >
             <img
               src={ search }
               alt="searchIcon"
