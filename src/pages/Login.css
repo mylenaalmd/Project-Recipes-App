@@ -9,11 +9,10 @@ body {
   border: 2px solid rgba(255, 255, 255, 0.18);
   border-radius: 20px;
   box-shadow: 0 8px 32px 0 rgba(18, 22, 87, 0.37);
-  margin-top: 30vh;
-  margin-left: 5%;
   height: 200px;
+  margin-left: 5%;
+  margin-top: 30vh;
   width: 90%;
-  -webkit-backdrop-filter: blur(4px);
 }
 
 form {
@@ -26,21 +25,21 @@ form {
 }
 
 form input {
-  height: 20%;
   border-radius: 5px;
+  height: 20%;
   padding: 10px;
 }
 
 form button {
   background-color: #8f36cf;
-  color: rgb(0, 0, 0);
   border-radius: 10px;
+  color: black;
   width: 50%;
 }
 
 form button:disabled {
   background-color: #502d69;
-  color: rgb(95, 95, 167);
   border-radius: 10px;
+  color: rgb(95, 95, 167);
   width: 50%;
 }
