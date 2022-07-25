@@ -7,15 +7,21 @@ import context from '../context/context';
 import blackHeart from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
+import IngredientsList from './IngredientsList';
 
 const copy = require('clipboard-copy');
 
-function RecipesInProgressFood() {
+// const THREE_SECONDS = 3000;
+
+function RecipeInProgressFood() {
   const { pathname } = useLocation();
   const rota = pathname.includes('foods') && 'meals';
   const { idRecipe } = useParams();
-  const INITIAL_STATE = { [rota]: { [idRecipe]: [] } };
+
+  // const data = localStorage.getItem('inProgressRecipes');
+  const INITIAL_STATE = { [rota]: { [idRecipe]: [] }, cocktails: {} };
   const [meals, setMeals] = useState(INITIAL_STATE);
+
   const { dataFood, setDataFood, setDoingRecipe, doingRecipe,
     recipesMade, setRecipesMade } = useContext(context);
   const history = useHistory();
@@ -26,44 +32,69 @@ function RecipesInProgressFood() {
   useFetchIngredients(urlFood, setDataFood, setIngredients, 'meals');
 
   const saveCheckbox = (dado) => {
-    setMeals((prev) => (
-      {
-        ...prev,
-        [rota]: {
-          ...prev[rota],
-          [idRecipe]: [...prev[rota][idRecipe], dado],
-        },
+    if (meals[rota][idRecipe].some((el) => el === dado)) {
+      setMeals((prev) => (
+        {
+          ...prev,
+          [rota]: {
+            ...prev[rota],
+            [idRecipe]: prev[rota][idRecipe].filter((item) => item !== dado),
+          },
+        }
+      ));
+    } else {
+      setMeals((prev) => (
+        {
+          ...prev,
+          [rota]: {
+            ...prev[rota],
+            [idRecipe]: [...prev[rota][idRecipe], dado],
+          },
 
-      }
-    ));
+        }
+      ));
+    }
     setDoingRecipe([...doingRecipe, idRecipe]);
     // console.log(meals);
   };
 
-  useEffect(() => {
-    // const dataLocalStorage = () => {
-    const local = localStorage.getItem('inProgressRecipes');
-    if (local) {
-      let object = JSON.parse(local);
-      object = {
-        ...object,
-        meals: {
-          ...object?.meals,
-          ...meals[rota],
-        },
-      };
-      localStorage.setItem('inProgressRecipes', JSON.stringify(object));
-    } else {
-      localStorage.setItem('inProgressRecipes', JSON.stringify(meals));
-    }
-    // };
-    // dataLocalStorage();
-  }, [meals, rota]);
+  // inicio bloco de codigo atual
+  // useEffect(() => {
+  //   // const dataLocalStorage = () => {
+  //   const local = localStorage.getItem('inProgressRecipes');
+  //   if (local) {
+  //     let object = JSON.parse(local);
+  //     object = {
+  //       ...object,
+  //       meals: {
+  //         ...object?.meals,
+  //         ...meals[rota],
+  //       },
+  //     };
+  //     localStorage.setItem('inProgressRecipes', JSON.stringify(object));
+  //     // console.log(object);
+  //   } else {
+  //     localStorage.setItem('inProgressRecipes', JSON.stringify(meals));
+  //   }
+  //   // };
+  //   // dataLocalStorage();
+  // }, [meals, rota]);
 
+  // final bloco de codigo atual
+
+  // inicio bloco de codigo antigo
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem('inProgressRecipes'));
     setMeals(data === null ? { [rota]: { [idRecipe]: [] } } : data);
   }, [idRecipe, rota]);
+
+  useEffect(() => {
+    // const dataLocalStorage = () => {
+    localStorage.setItem('inProgressRecipes', JSON.stringify(meals));
+    // dataLocalStorage();
+  }, [meals]);
+
+  // final bloco de codigo antigo
 
   useEffect(() => {
     const changeIsFav = () => {
@@ -150,7 +181,7 @@ function RecipesInProgressFood() {
               data-testid="recipe-photo"
             />
           </div>
-          {
+          {/* {
 
             ingredients.map((key, i) => (
               <div
@@ -159,27 +190,20 @@ function RecipesInProgressFood() {
               >
                 <label
                   htmlFor={ i }
-                  className={ meals[rota][idRecipe] && meals[rota][idRecipe]
-                    .some((made) => (
-                      made === key))
-                    ? 'checkboxIngredient' : '' }
                 >
                   <input
                     type="checkbox"
                     data-testid={ `${i}-ingredient` }
                     id={ i }
                     checked={ meals[rota][idRecipe] && meals[rota][idRecipe]
-                      .some((made) => (
-                        made === key)) }
+                      .some((made) => made === key) }
                     onChange={
                       () => saveCheckbox(key)
                     }
                   />
                   <p
                     className={ meals[rota][idRecipe] && meals[rota][idRecipe]
-                      .some((made) => (
-                        made === key))
-                      ? 'checkboxIngredient' : '' }
+                      .some((made) => (made === key)) ? 'checkboxIngredient' : '' }
                   >
 
                     {key}
@@ -188,7 +212,13 @@ function RecipesInProgressFood() {
                 </label>
               </div>
             ))
-          }
+          } */}
+          <IngredientsList
+            currentRecipe={ meals[rota][idRecipe] }
+            ingredients={ ingredients }
+            saveCheckbox={ saveCheckbox }
+
+          />
           <p data-testid="instructions">{food.strInstructions}</p>
           <button
             type="button"
@@ -206,4 +236,4 @@ function RecipesInProgressFood() {
   );
 }
 
-export default RecipesInProgressFood;
+export default RecipeInProgressFood;

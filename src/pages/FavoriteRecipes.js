@@ -6,7 +6,7 @@ import blackHeart from '../images/blackHeartIcon.svg';
 
 const copy = require('clipboard-copy');
 
-const THREE_SECONDS = 3000;
+// const THREE_SECONDS = 3000;
 
 function FavoriteRecipes() {
   const [favs, setFavs] = useState();

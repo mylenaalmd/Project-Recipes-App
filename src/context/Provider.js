@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Context from './context';
 // import useFetch from '../hooks/useFetch';
@@ -24,14 +24,14 @@ function Provider({ children }) {
   // useFetch(urlDrinks, setDataDrinks, MAX_RECIPES, 'drinks');
   // useFetch(urlDrinksCategory, setDataDrinksCategory, MAX_CATEGORIES, 'drinks');
 
-  useEffect(() => {
-    const getDoing = () => {
-      const doing = JSON.parse(localStorage.getItem('inProgressRecipes'));
-      if (doing?.meals) setDoingRecipe(Object.keys(doing.meals));
-      if (doing?.cocktails) setDoingRecipe(Object.keys(doing.cocktails));
-    };
-    getDoing();
-  }, []);
+  // useEffect(() => {
+  //   const getDoing = () => {
+  //     const doing = JSON.parse(localStorage.getItem('inProgressRecipes'));
+  //     if (doing?.meals) setDoingRecipe(Object.keys(doing.meals));
+  //     if (doing?.cocktails) setDoingRecipe(Object.keys(doing.cocktails));
+  //   };
+  //   getDoing();
+  // }, []);
 
   const context = {
     dataFoods,

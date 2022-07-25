@@ -143,12 +143,20 @@ describe('Testes do componente Recipes in progress', () => {
     async () => {
       const { history } = renderWithRouter(<App />);
       history.push(INITIAL_PATHNAME);
-      window.document.execCommand = function execCommandMock() { return 'click'; };
-      const shareBtn = await screen.findByTestId('share-btn');
-      userEvent.click(shareBtn);
 
-      const copiedMessage = await screen.findByText(/link copied!/i);
-      expect(copiedMessage).toBeInTheDocument();
+      window.document.execCommand = function execCommandMock() { return 'click'; };
+
+      const THREE_SECONDS = 3000;
+      const btnCopy = await screen.findByTestId('share-btn');
+      expect(btnCopy).toBeInTheDocument();
+      userEvent.click(btnCopy);
+
+      const linkCopiedTxt = await screen.findByText(/Link copied!/i);
+      expect(linkCopiedTxt).toBeInTheDocument();
+
+      setTimeout(() => {
+        expect(linkCopiedTxt).not.toBeInTheDocument();
+      }, THREE_SECONDS);
     });
 
   it('Testa se o botão de favoritar funciona', async () => {
@@ -167,11 +175,15 @@ describe('Testes do componente Recipes in progress', () => {
   it('Testa se o checkbox funciona', async () => {
     const { history } = renderWithRouter(<App />);
     history.push(INITIAL_PATHNAME);
+
     const checkboxName = await screen.findByTestId('0-ingredient');
     expect(checkboxName).not.toBeChecked();
 
     userEvent.click(checkboxName);
     expect(checkboxName).toBeChecked();
+
+    userEvent.click(checkboxName);
+    expect(checkboxName).not.toBeChecked();
   });
 
   it('Testa o botão fica habilitado apos concluir', async () => {
@@ -191,14 +203,15 @@ describe('Testes do componente Recipes in progress', () => {
     const { location: { pathname } } = history;
     expect(pathname).toBe('/done-recipes');
   });
-  // it('Testa se aplicação funciona com o localstorage vazio', async () => {
-  //   localStorageMock.removeItem('inProgressRecipes');
-  //   const { history } = renderWithRouter(<App />);
-  //   history.push(INITIAL_PATHNAME);
 
-  //   const recipeTitle = await screen.findByTestId('recipe-title');
-  //   expect(recipeTitle).toBeInTheDocument();
-  //   const checkboxName = await screen.findByTestId('0-ingredient');
-  //   expect(checkboxName).not.toBeChecked();
-  // });
+  it('Testa se aplicação funciona com o localstorage vazio', async () => {
+    localStorageMock.removeItem('inProgressRecipes');
+    const { history } = renderWithRouter(<App />);
+    history.push(INITIAL_PATHNAME);
+
+    const recipeTitle = await screen.findByTestId('recipe-title');
+    expect(recipeTitle).toBeInTheDocument();
+    const checkboxName = await screen.findByTestId('0-ingredient');
+    expect(checkboxName).not.toBeChecked();
+  });
 });

@@ -11,8 +11,11 @@ import FavoriteRecipes from './pages/FavoriteRecipes';
 import FoodsDetail from './pages/FoodsDetail';
 import DrinksDetail from './pages/DrinksDetail';
 import Provider from './context/Provider';
-import InProgressFood from './pages/InProgressFood';
-import InProgressDrink from './pages/InProgressDrink';
+// import InProgressFood from './pages/InProgressFood';
+// import InProgressDrink from './pages/InProgressDrink';
+// import RecipeInProgressFood from './components/RecipeInProgressFood';
+// import RecipeInProgressDrink from './components/RecipeInProgressDrink';
+import RecipeInProgress from './pages/RecipeInProgress';
 
 function App() {
   return (
@@ -24,8 +27,16 @@ function App() {
         <Route exact path="/profile" component={ Profile } />
         <Route exact path="/done-recipes" component={ DoneRecipes } />
         <Route exact path="/favorite-recipes" component={ FavoriteRecipes } />
-        <Route exact path="/drinks/:idRecipe/in-progress" component={ InProgressDrink } />
-        <Route exact path="/foods/:idRecipe/in-progress" component={ InProgressFood } />
+        <Route
+          exact
+          path="/drinks/:idRecipe/in-progress"
+          render={ () => <RecipeInProgress type="drinks" /> }
+        />
+        <Route
+          exact
+          path="/foods/:idRecipe/in-progress"
+          render={ () => <RecipeInProgress type="foods" /> }
+        />
         <Route exact path="/foods/:idRecipe" component={ FoodsDetail } />
         <Route exact path="/drinks/:idRecipe" component={ DrinksDetail } />
       </Provider>

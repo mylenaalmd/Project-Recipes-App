@@ -9,9 +9,9 @@ import whiteHeart from '../images/whiteHeartIcon.svg';
 
 const copy = require('clipboard-copy');
 
-const THREE_SECONDS = 3000;
+// const THREE_SECONDS = 3000;
 
-function RecipesInProgressDrink() {
+function RecipeInProgressDrink() {
   const { pathname } = useLocation();
   const rota = pathname.includes('drinks') ? 'cocktails' : 'meals';
   const { idRecipe } = useParams();
@@ -66,9 +66,9 @@ function RecipesInProgressDrink() {
   const showMessagem = () => {
     setIsCopied(true);
     copy(`http://localhost:3000/drinks/${idRecipe}`);
-    setTimeout(() => {
-      setIsCopied(false);
-    }, THREE_SECONDS);
+    // setTimeout(() => {
+    //   setIsCopied(false);
+    // }, THREE_SECONDS);
   };
 
   const favoriteRecipe = (change) => {
@@ -188,4 +188,4 @@ function RecipesInProgressDrink() {
     </>
   );
 }
-export default RecipesInProgressDrink;
+export default RecipeInProgressDrink;
