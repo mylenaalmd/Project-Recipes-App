@@ -6,6 +6,7 @@ import blackHeart from '../images/blackHeartIcon.svg';
 import shareIcon from '../images/shareIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
 import IngredientsList from './IngredientsList';
+import './RecipeInProgressFood.css';
 
 const copy = require('clipboard-copy');
 
@@ -125,50 +126,72 @@ function RecipeInProgressFood() {
   };
 
   return (
-    <>
-      <div>RecipesInProgress</div>
+    <div>
+      {/* <div>RecipesInProgress</div> */}
       { dataFood.map((food) => (
         <div key={ food.idMeal } className="recipesInProgress">
-          <h2 data-testid="recipe-title">{food.strMeal}</h2>
-          <h4 data-testid="recipe-category">{food.strCategory}</h4>
-          <button
-            type="button"
-            data-testid="share-btn"
-            onClick={ showMessagem }
-          >
-            <img src={ shareIcon } alt="share-btn" />
-          </button>
-          { isCopied && (<p>Link copied!</p>)}
-          <button
-            type="button"
-            onClick={ () => favoriteRecipe(!isFav) }
-          >
-            <img
-              data-testid="favorite-btn"
-              alt="favorite-btn"
-              src={ isFav ? (blackHeart) : (whiteHeart) }
-            />
-          </button>
-          <div
-            className="card"
-          >
-            <img
-              src={ food.strMealThumb }
-              alt={ food.strMeal }
-              data-testid="recipe-photo"
-            />
-          </div>
-          <IngredientsList
-            currentRecipe={ meals[rota][idRecipe] }
-            ingredients={ ingredients }
-            saveCheckbox={ saveCheckbox }
-
+          <img
+            src={ food.strMealThumb }
+            alt={ food.strMeal }
+            data-testid="recipe-photo"
+            className="recipe-img"
           />
-          <p data-testid="instructions">{food.strInstructions}</p>
+          <h2 data-testid="recipe-title" className="title-progress">{food.strMeal}</h2>
+          <section className="category-container">
+            <span
+              data-testid="recipe-category"
+              className="recipe-category"
+            >
+              {food.strCategory}
+
+            </span>
+            <div className="link-copied">
+              { isCopied && (<span>Link copied!</span>)}
+            </div>
+            <nav className="btn-container">
+              <button
+                type="button"
+                data-testid="share-btn"
+                className="btn-progress"
+                onClick={ showMessagem }
+              >
+                <img src={ shareIcon } alt="share-btn" />
+
+              </button>
+              <button
+                type="button"
+                className="btn-progress"
+                onClick={ () => favoriteRecipe(!isFav) }
+              >
+                <img
+                  data-testid="favorite-btn"
+                  alt="favorite-btn"
+                  className="favorite-icon"
+                  src={ isFav ? (blackHeart) : (whiteHeart) }
+                />
+              </button>
+            </nav>
+          </section>
+          <main className="recipe-in-progress">
+            <h4>Ingredients</h4>
+            <IngredientsList
+              currentRecipe={ meals[rota][idRecipe] }
+              ingredients={ ingredients }
+              saveCheckbox={ saveCheckbox }
+            />
+            <h4>Instructions</h4>
+            <p
+              data-testid="instructions"
+              className="instructions"
+            >
+              {food.strInstructions}
+
+            </p>
+          </main>
           <button
             type="button"
             data-testid="finish-recipe-btn"
-            className="finish-recipe-btn "
+            className="btn-finish-recipe"
             disabled={ meals[rota][idRecipe]
               && (ingredients.length !== meals[rota][idRecipe].length) }
             onClick={ () => handleFinish() }
@@ -177,7 +200,7 @@ function RecipeInProgressFood() {
           </button>
         </div>
       ))}
-    </>
+    </div>
   );
 }
 

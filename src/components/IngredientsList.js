@@ -6,8 +6,12 @@ function IngredientsList({ currentRecipe, saveCheckbox, ingredients }) {
   return (
     <div>
       {ingredients.map((ingredient, i) => (
-        <div key={ ingredient } data-testid={ `${i}-ingredient-step` }>
-          <label htmlFor={ `${i}-${ingredient}` }>
+        <div
+          key={ ingredient }
+          data-testid={ `${i}-ingredient-step` }
+          className="ingredients-list"
+        >
+          <label htmlFor={ `${i}-${ingredient}` } className="label">
             <input
               type="checkbox"
               data-testid={ `${i}-ingredient` }
@@ -18,12 +22,15 @@ function IngredientsList({ currentRecipe, saveCheckbox, ingredients }) {
               }
               onChange={ () => saveCheckbox(ingredient) }
             />
+            <span
+              className="checkmark"
+            />
             <p
               className={
                 currentRecipe
                 && currentRecipe.some((made) => made === ingredient)
-                  ? 'checkboxIngredient'
-                  : ''
+                  ? 'checkboxIngredient ingredient-name'
+                  : 'ingredient-name'
               }
             >
               {ingredient}
