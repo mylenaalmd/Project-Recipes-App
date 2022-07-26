@@ -1,5 +1,8 @@
-body {
+.background {
   background-image: url('../images/Receitas.jpeg');
+  height: 100%;
+  position: fixed;
+  width: 100%;
 }
 
 .Login {
