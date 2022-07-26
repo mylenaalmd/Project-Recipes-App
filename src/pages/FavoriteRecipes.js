@@ -63,7 +63,7 @@ function FavoriteRecipes() {
       {
         favs && favs.filter((curr) => (filter === 'all' ? curr : (curr.type === filter)))
           .map((recipe, index) => (
-            <div className="card" key={ recipe.id }>
+            <div className="cards" key={ recipe.id }>
               <Link to={ `/${recipe.type}s/${recipe.id}` }>
                 <img
                   className="detail"
