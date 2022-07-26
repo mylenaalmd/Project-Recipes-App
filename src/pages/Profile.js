@@ -26,7 +26,7 @@ function Profile({ history: { push } }) {
   return (
     <section className="profile">
       <Header title="Profile" isSearch={ false } />
-      <p data-testid="profile-email">{email}</p>
+      <p data-testid="profile-email">{user}</p>
       <div className="divProfile">
         <Link
           data-testid="profile-done-btn"

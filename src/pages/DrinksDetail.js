@@ -162,6 +162,18 @@ function DrinksDetails({ history: { push }, location: { pathname } }) {
 
             </p>
           </main>
+          { recipesMade.some((made) => made === drink.idDrink) === false
+            && (
+              <button
+                className="btn-start-recipe"
+                data-testid="start-recipe-btn"
+                type="button"
+                onClick={ () => push(`${pathname}/in-progress`) }
+              >
+                { doingRecipe.some((doing) => doing === drink.idDrink)
+                  ? 'Continue Recipe' : 'Start Recipe' }
+              </button>
+            )}
         </div>
       ))}
       <div className="carouselItems">
@@ -184,18 +196,6 @@ function DrinksDetails({ history: { push }, location: { pathname } }) {
           </div>
         ))}
       </div>
-      { recipesMade.some((made) => made === drink.idDrink) === false
-        && (
-          <button
-            className="btn-start-recipe"
-            data-testid="start-recipe-btn"
-            type="button"
-            onClick={ () => push(`${pathname}/in-progress`) }
-          >
-            { doingRecipe.some((doing) => doing === drink.idDrink)
-              ? 'Continue Recipe' : 'Start Recipe' }
-          </button>
-        )}
     </div>
   );
 }
