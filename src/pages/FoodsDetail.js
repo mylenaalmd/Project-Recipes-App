@@ -7,6 +7,7 @@ import shareIcon from '../images/shareIcon.svg';
 import blackHeart from '../images/blackHeartIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
 import './RecipeDetails.css';
+import useFetchIngredients from '../hooks/useFetchIngredients';
 
 const copy = require('clipboard-copy');
 
@@ -20,6 +21,7 @@ function FoodDetails({ history: { push }, location: { pathname } }) {
   const { idRecipe } = useParams();
   const [isCopied, setIsCopied] = useState(false);
   const [isFav, setIsFav] = useState(false);
+  const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
     const getDoing = () => {
@@ -76,7 +78,7 @@ function FoodDetails({ history: { push }, location: { pathname } }) {
   };
 
   const urlFood = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${idRecipe}`;
-  useFetch(urlFood, setDataFood, MAX_RECIPES, 'meals');
+  useFetchIngredients(urlFood, setDataFood, setIngredients, 'meals');
   useFetch(urlDrink, setDataDrink, MAX_RECIPES, 'drinks');
 
   return (
@@ -136,22 +138,19 @@ function FoodDetails({ history: { push }, location: { pathname } }) {
           <main className="recipe-detail">
             <ul>
               {
-                Object.keys(food).filter((key) => key.includes('strIngredient'))
-                  .map((key, index) => (
-                    food[key] && (
-                      <div
-                        key={ key }
-                        data-testid={ `${index}-ingredient-name-and-measure` }
-                      >
-                        <li
-                          className="ingredient-list"
-                        >
-                          {`${food[`strMeasure${index + 1}`]} ${food[key]}`}
+                ingredients.map((key, index) => (
+                  <div
+                    key={ key }
+                    data-testid={ `${index}-ingredient-name-and-measure` }
+                  >
+                    <li
+                      className="ingredient-list"
+                    >
+                      {key}
 
-                        </li>
-                      </div>
-                    )
-                  ))
+                    </li>
+                  </div>
+                ))
               }
             </ul>
             <p

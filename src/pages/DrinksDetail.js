@@ -7,6 +7,7 @@ import shareIcon from '../images/shareIcon.svg';
 import blackHeart from '../images/blackHeartIcon.svg';
 import whiteHeart from '../images/whiteHeartIcon.svg';
 import './RecipeDetails.css';
+import useFetchIngredients from '../hooks/useFetchIngredients';
 
 const copy = require('clipboard-copy');
 
@@ -20,6 +21,7 @@ function DrinksDetails({ history: { push }, location: { pathname } }) {
   const { idRecipe } = useParams();
   const [isCopied, setIsCopied] = useState(false);
   const [isFav, setIsFav] = useState(false);
+  const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
     const getDoing = () => {
@@ -76,7 +78,7 @@ function DrinksDetails({ history: { push }, location: { pathname } }) {
   };
 
   const urlDrink = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${idRecipe}`;
-  useFetch(urlDrink, setDataDrink, MAX_RECIPES, 'drinks');
+  useFetchIngredients(urlDrink, setDataDrink, setIngredients, 'drinks');
   useFetch(urlFoods, setDataFoods, MAX_RECIPES, 'meals');
 
   return (
@@ -136,22 +138,20 @@ function DrinksDetails({ history: { push }, location: { pathname } }) {
           <main className="recipe-in-progress">
             <ul>
               {
-                Object.keys(drink).filter((key) => key.includes('strIngredient'))
-                  .map((key, index) => (
-                    drink[key] && (
-                      <div
-                        key={ key }
-                        data-testid={ `${index}-ingredient-name-and-measure` }
-                      >
-                        <li
-                          className="ingredient-list"
-                        >
-                          {`${drink[`strMeasure${index + 1}`]} ${drink[key]}`}
 
-                        </li>
-                      </div>
-                    )
-                  ))
+                ingredients.map((key, index) => (
+                  <div
+                    key={ key }
+                    data-testid={ `${index}-ingredient-name-and-measure` }
+                  >
+                    <li
+                      className="ingredient-list"
+                    >
+                      {key}
+
+                    </li>
+                  </div>
+                ))
               }
             </ul>
             <p

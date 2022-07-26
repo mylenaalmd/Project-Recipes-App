@@ -123,6 +123,20 @@ function RecipeInProgressFood() {
     const filtered = doingRecipe.filter((curr) => curr !== idRecipe);
     setDoingRecipe(filtered);
     setRecipesMade([...recipesMade, idRecipe]);
+    const obj = {
+      id: dataFood[0].idMeal,
+      type: 'food',
+      nationality: dataFood[0].strArea,
+      category: dataFood[0].strCategory,
+      alcoholicOrNot: '',
+      name: dataFood[0].strMeal,
+      image: dataFood[0].strMealThumb,
+      doneDate: '23/06/2020',
+      tags: dataFood[0].strTags ? dataFood[0].strTags.split(',').slice(0, 2) : [],
+    };
+    const alreadyDone = JSON.parse(localStorage.getItem('doneRecipes')) || [];
+    const doneRecipes = [...alreadyDone, obj];
+    localStorage.setItem('doneRecipes', JSON.stringify(doneRecipes));
   };
 
   return (
